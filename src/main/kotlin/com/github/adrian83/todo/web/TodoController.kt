@@ -7,14 +7,15 @@ import com.github.adrian83.todo.domain.todo.model.Todo
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import com.github.adrian83.todo.web.model.NewTodo
+import com.github.adrian83.todo.domain.todo.TodoService
 
 
 @RestController
-class TodoController {
+class TodoController(val todoService: TodoService) {
 
 	@PostMapping("/")
 	fun persist(@RequestBody newTodo: NewTodo): Todo 
-		= Todo(666L, newTodo.text)
+		= todoService.persist(Todo(0L, newTodo.text))
 	
 	
 	@GetMapping("/")
