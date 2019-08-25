@@ -8,22 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import com.github.adrian83.todo.web.model.NewTodo
 import com.github.adrian83.todo.domain.todo.TodoService
+import java.util.Optional
+import org.springframework.web.bind.annotation.PutMapping
 
 
 @RestController
 class TodoController(val todoService: TodoService) {
 
 	@PostMapping("/")
-	fun persist(@RequestBody newTodo: NewTodo): Todo 
-		= todoService.persist(Todo(0L, newTodo.text))
-	
+	fun persist(@RequestBody newTodo: NewTodo): Todo = todoService.persist(Todo(0L, newTodo.text))
 	
 	@GetMapping("/")
-	fun findAll() = listOf<Todo>(
-		Todo(1L, "Read good book about Kotlin"),
-		Todo(1L, "Read good book about Kotlin"))
+	fun findAll(): List<Todo> = todoService.list()
 
 	@GetMapping("/{id}")
-	fun findByLastName(@PathVariable id:Long)
-		= Todo(id, "Read good book about Kotlin")
+	fun findById(@PathVariable id:Long): Optional<Todo> = todoService.findById(id)
+	
+	@PutMapping("/{id}")
+	fun update(@PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo {
+		var todo = Todo(id, newTodo.text)
+		return todoService.update(todo)
+	} 
+	
 }
