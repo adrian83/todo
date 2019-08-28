@@ -1,12 +1,15 @@
-package com.github.adrian83.todo.domain.todo.model
+package com.github.adrian83.todo.domain.user.model
 
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 
+
+
 @Entity
-data class Todo(
+data class User(
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
-	val text: String) {
+	val email: String,
+	val passwordHash: String) {
 }

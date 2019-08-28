@@ -10,21 +10,28 @@ import com.github.adrian83.todo.web.model.NewTodo
 import com.github.adrian83.todo.domain.todo.TodoService
 import java.util.Optional
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestMapping
 
 
 @RestController
+@RequestMapping(value=arrayOf(TodoController.API_PREFIX))
 class TodoController(val todoService: TodoService) {
 
-	@PostMapping("/")
+	companion object {
+        const val API_PREFIX = "api/v1/"
+		const val RES_PREFIX = "todos"
+    }
+	
+	@PostMapping(RES_PREFIX)
 	fun persist(@RequestBody newTodo: NewTodo): Todo = todoService.persist(Todo(0L, newTodo.text))
 	
-	@GetMapping("/")
+	@GetMapping(RES_PREFIX)
 	fun findAll(): List<Todo> = todoService.list()
 
-	@GetMapping("/{id}")
+	@GetMapping(RES_PREFIX+"/{id}")
 	fun findById(@PathVariable id:Long): Optional<Todo> = todoService.findById(id)
 	
-	@PutMapping("/{id}")
+	@PutMapping(RES_PREFIX+"/{id}")
 	fun update(@PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo {
 		var todo = Todo(id, newTodo.text)
 		return todoService.update(todo)
