@@ -12,11 +12,7 @@ class UserService (val userRepository: UserRepository){
 	fun persist(user: User): User = userRepository.save(user)
 	
 	fun findByEmail(email: String): User? {
-		
-		var user = User(email)
-		var example = Example.of(user)
-		
-		return userRepository.findOne(example).orElse(null)
+		return userRepository.findByEmail(email)
 	} 
 	
 }
