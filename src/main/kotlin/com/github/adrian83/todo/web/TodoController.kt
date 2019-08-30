@@ -29,7 +29,7 @@ class TodoController(val todoService: TodoService) {
 	fun findAll(): List<Todo> = todoService.list()
 
 	@GetMapping(RES_PREFIX+"/{id}")
-	fun findById(@PathVariable id:Long): Optional<Todo> = todoService.findById(id)
+	fun findById(@PathVariable id:Long): Todo? = todoService.findById(id)
 	
 	@PutMapping(RES_PREFIX+"/{id}")
 	fun update(@PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo {

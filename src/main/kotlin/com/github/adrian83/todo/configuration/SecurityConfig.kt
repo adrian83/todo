@@ -8,40 +8,34 @@ import org.springframework.context.annotation.Bean
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository
+import com.github.adrian83.todo.security.TodoAuthenticationManager
+import com.github.adrian83.todo.security.TodoSecurityContextRepository
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 
 
 @Configuration
 @EnableWebFluxSecurity
-class SecurityConfig {
+class SecurityConfig  {
 	
 	
 	@Bean
-fun  securitygWebFilterChain(
-  http: ServerHttpSecurity ): SecurityWebFilterChain {
-    return http.authorizeExchange()
-		.pathMatchers("/api/v1/auth/**")
-		.permitAll()
-		.pathMatchers("/api/v1/**")
-		.authenticated()
+	fun securitygWebFilterChain(http: ServerHttpSecurity,
+								authenticationManager: TodoAuthenticationManager,
+								securityContextRepository: TodoSecurityContextRepository): SecurityWebFilterChain {
+    return http
+		.httpBasic().disable()
+		.formLogin().disable()
+		.csrf().disable()
+		.authorizeExchange() 
+		.pathMatchers("/api/v1/auth/**").permitAll()
+		.pathMatchers("/api/v1/**").authenticated()
 		.and()
-		.csrf()
-		.disable()
+		.authenticationManager(authenticationManager)
+		.securityContextRepository(securityContextRepository)
 		.build();
-}
-	
-@Bean
-fun  userDetailsService(): MapReactiveUserDetailsService {
-    var user = User
-      .withUsername("user")
-      .password("password")
-      .roles("USER")
-      .build();
-    return MapReactiveUserDetailsService(user);
-}
-	
-
+	}
 }

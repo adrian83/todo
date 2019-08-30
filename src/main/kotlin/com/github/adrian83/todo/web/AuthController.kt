@@ -18,6 +18,8 @@ class AuthController(val authService: AuthService) {
 	
 	@PostMapping(RES_PREFIX+"/register")
 	fun persist(@RequestBody registration: Registration): Boolean {
+		
+		System.out.println("Registration")
 	
 		authService.register(registration.email, registration.password)
 		return true	

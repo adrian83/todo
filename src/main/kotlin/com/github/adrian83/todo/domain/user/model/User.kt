@@ -9,7 +9,9 @@ import javax.persistence.GenerationType
 
 @Entity
 data class User(
-	@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
+	@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long?,
 	val email: String,
-	val passwordHash: String) {
+	val passwordHash: String?) {
+	
+	constructor(email: String) : this(null, email, null){}
 }
