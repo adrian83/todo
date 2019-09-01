@@ -33,6 +33,7 @@ class SecurityConfig  {
 		.authorizeExchange() 
 		.pathMatchers("/api/v1/auth/**").permitAll()
 		.pathMatchers("/api/v1/**").authenticated()
+		.anyExchange().authenticated()
 		.and()
 		.authenticationManager(authenticationManager)
 		.securityContextRepository(securityContextRepository)

@@ -20,17 +20,16 @@ class AuthController(val authService: AuthService) {
 		const val RES_PREFIX = "auth"
     }
 	
-	@PostMapping(RES_PREFIX+"/register")
+	@PostMapping(RES_PREFIX + "/register")
 	fun register(@RequestBody registration: Registration): User {
 		
 		System.out.println("Registration")
 	
 		return authService.register(registration.email, registration.password)
-	
 	}
 	
 	
-		@PostMapping(RES_PREFIX+"/login")
+		@PostMapping(RES_PREFIX + "/login")
 	fun login(@RequestBody login: Login, response: ServerHttpResponse) {
 		
 		System.out.println("Login")
@@ -38,8 +37,5 @@ class AuthController(val authService: AuthService) {
 		authService.login(login.email, login.password).map{
 			response.getHeaders().add(HttpHeaders.AUTHORIZATION, it);
 		}
-			
-		
 	}
-	
 }
