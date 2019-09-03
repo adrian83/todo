@@ -10,13 +10,21 @@ class RegistrationValidator: ConstraintValidator<ValidRegistration, Registration
     override fun initialize(validRegistration: ValidRegistration ) {
     }
 
-    override fun isValid(registration: Registration, context: ConstraintValidatorContext ): Boolean {
-//        if ( car == null ) {
-//            return true;
-//        }
-//
-//        return car.getPassengers().size() <= car.getSeatCount();
-		return false
+    override fun isValid(form: Registration?, context: ConstraintValidatorContext ): Boolean {
+
+		if(form == null) {
+			return false
+		}
+		
+		if(form.password == null && form.repeatedPassword == null) {
+			return false
+		}
+		
+		if(!form.password.equals(form.repeatedPassword)){
+			return false
+		}
+
+		return true
     }
 	
 	
