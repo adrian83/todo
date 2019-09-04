@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.validation.ObjectError
+import com.github.adrian83.todo.security.exception.InvalidEmailOrPasswordException
 
 @RestController
 @RequestMapping(value=arrayOf(TodoController.API_PREFIX))
@@ -37,11 +38,8 @@ class AuthController(val authService: AuthService) {
 	
 	@PostMapping(RES_PREFIX + "/login")
 	fun login(@Valid @RequestBody login: Login, response: ServerHttpResponse) {
-		authService.login(login.email, login.password)
-		.map{
-			response.getHeaders().add(HttpHeaders.AUTHORIZATION, it);
-		}
-		
+		var jwtToken = authService.login(login.email, login.password)
+		response.getHeaders().add(HttpHeaders.AUTHORIZATION, jwtToken);
 	}
 	
 	
@@ -55,6 +53,8 @@ class AuthController(val authService: AuthService) {
 			return ResponseEntity<List<ObjectError>>(ex.getBindingResult().getAllErrors(), HttpStatus.BAD_REQUEST)
 		} else if(ex is WebExchangeBindException){
 			return ResponseEntity<List<ObjectError>>(ex.getAllErrors(), HttpStatus.BAD_REQUEST)
+		} else if(ex is InvalidEmailOrPasswordException){
+			return ResponseEntity<String>(ex.message, HttpStatus.BAD_REQUEST)
 		}
 		
         return ResponseEntity<String>(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)

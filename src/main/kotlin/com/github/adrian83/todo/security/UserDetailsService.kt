@@ -11,14 +11,10 @@ import reactor.core.publisher.Mono
 class TodoUserDetailsService(val userService: UserService): ReactiveUserDetailsService {
 	
 	override fun findByUsername(email: String): Mono<UserDetails> {
-		var maybeUser = userService.findByEmail(email)
-		
-		if(maybeUser == null) {
-			System.out.println("maybeUser is null")
-			return Mono.empty()
-		}
-		
-		return Mono.just(TodoUserDetails(maybeUser))
+		var user = userService.findByEmail(email)
+		print("\nUser: " + user)
+		return Mono.justOrEmpty(user)
+			.map{TodoUserDetails(it!!)}
 	}
 
 }

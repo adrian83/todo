@@ -11,6 +11,7 @@ import com.github.adrian83.todo.domain.todo.TodoService
 import java.util.Optional
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import java.security.Principal
 
 
 @RestController
@@ -22,14 +23,21 @@ class TodoController(val todoService: TodoService) {
 		const val RES_PREFIX = "todos"
     }
 	
+	
 	@PostMapping(RES_PREFIX)
-	fun persist(@RequestBody newTodo: NewTodo): Todo = todoService.persist(Todo(0L, newTodo.text))
+	fun persist(principal: Principal, @RequestBody newTodo: NewTodo): Todo {
+		print("PRINCIPAL: " + principal.getName())
+		return todoService.persist(Todo(0L, newTodo.text))
+	}
+	
 	
 	@GetMapping(RES_PREFIX)
 	fun findAll(): List<Todo> = todoService.list()
 
+	
 	@GetMapping(RES_PREFIX+"/{id}")
 	fun findById(@PathVariable id:Long): Todo? = todoService.findById(id)
+	
 	
 	@PutMapping(RES_PREFIX+"/{id}")
 	fun update(@PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo {

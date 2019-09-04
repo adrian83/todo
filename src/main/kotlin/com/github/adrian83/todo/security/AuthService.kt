@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt
 import com.github.adrian83.todo.domain.user.model.User
 import reactor.core.publisher.Mono
 import java.lang.IllegalArgumentException
+import com.github.adrian83.todo.security.exception.InvalidEmailOrPasswordException
 
 @Service
 @Transactional
@@ -20,27 +21,21 @@ class AuthService(val userService: UserService,
 		return userService.persist(user)
 	}
 	
-	fun login(email: String, password: String): Mono<String> {
-		
-		System.out.println("in login 1 " + email)
+	fun login(email: String, password: String): String {
 		
 		var user = userService.findByEmail(email)
-		
 		if(user == null){
-			System.out.println("in login 2")
-			return Mono.empty()
+			throw InvalidEmailOrPasswordException("Invalid email or password")
 		}
 		
 		if(!passwordEncoder.compare(password, user.passwordHash?:"")){
-			System.out.println("in login 3")
-			throw IllegalArgumentException("invalidPassword or login")
+			throw InvalidEmailOrPasswordException("Invalid email or password")
 		}
-		
-		System.out.println("in login 4")
-		var authToken = AuthToken(user.id)
+	
+		var authToken = AuthToken(user.id, user.email)
 		var authTokenStr = jwtTokenEncoder.tokenToString(authToken)
-		System.out.println("in login 5")
-		return Mono.just(authTokenStr)
+
+		return authTokenStr
 	}
 	
 	

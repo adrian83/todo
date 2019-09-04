@@ -8,12 +8,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 
 @Component
-class TodoAuthenticationManager(var userDetailsService: TodoUserDetailsService): ReactiveAuthenticationManager {
+class TodoAuthenticationManager(
+	var userDetailsService: TodoUserDetailsService,
+	var jwtTokenEncoder: JwtTokenEncoder): ReactiveAuthenticationManager {
 	
 	override fun authenticate(authentication: Authentication): Mono<Authentication>? {
-		var authToken = authentication.getCredentials().toString()
-		var userDetailsMono = userDetailsService.findByUsername(authToken)
+		print("Authenticate")
+		var tokenStr = authentication.getCredentials().toString()
+		var authToken = jwtTokenEncoder.tokenFromString(tokenStr)
+		
+		print("\ntoken: " + authToken)
+		var userDetailsMono = userDetailsService.findByUsername(authToken.email)
+		
 		return userDetailsMono.map{
+			print("\nserdetails: " + it.password)
 			UsernamePasswordAuthenticationToken(it, null, it.getAuthorities())
 		}
 	}

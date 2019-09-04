@@ -7,6 +7,8 @@ import java.time.OffsetDateTime
 import java.util.Date
 import javax.crypto.spec.SecretKeySpec
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Component
 class JwtTokenEncoder {
@@ -17,17 +19,23 @@ class JwtTokenEncoder {
 		val SYGNATURE_ALGORITHM = SignatureAlgorithm.HS256
 		
 		const val USER_ID = "userID"
+		const val USER_EMAIL = "email"
     }
 	
 	
 	fun tokenToString(authToken: AuthToken): String {
 		
-		val validUntil = Date.from(UTC_DATETIME_OFFSET.toInstant())
+		val validUntil = Date.from(LocalDate.now()
+				.plusDays(5)
+				.atStartOfDay()
+				.atZone(ZoneId.systemDefault())
+			.toInstant());
 		 
 		return Jwts.builder()
 			.setSubject("users")
 			.setExpiration(validUntil)
 			.claim(USER_ID, authToken.userId)
+			.claim(USER_EMAIL, authToken.email)
 			.signWith(SYGNATURE_ALGORITHM, SECRET.toByteArray())
 			.compact();
 	}
@@ -39,8 +47,9 @@ class JwtTokenEncoder {
 		var claims = jwtClaims.getBody()
 		
 		var userIdStr = claims.get(USER_ID).toString()
+		var userEmail = claims.get(USER_EMAIL).toString()
 		
-		return AuthToken(userIdStr.toLong())
+		return AuthToken(userIdStr.toLong(), userEmail)
 	}
 	
 }

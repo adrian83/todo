@@ -11,9 +11,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.stereotype.Component
 import com.github.adrian83.todo.domain.user.model.User
+import org.springframework.http.server.reactive.ServerHttpRequest
+import com.github.adrian83.todo.domain.user.UserService
+import org.springframework.security.authentication.ReactiveAuthenticationManager
+import java.lang.IllegalStateException
+import org.springframework.security.core.userdetails.UserDetails
 
 @Component
-class TodoSecurityContextRepository(var authenticationManager: TodoAuthenticationManager): ServerSecurityContextRepository{
+class TodoSecurityContextRepository(
+	var authenticationManager: TodoAuthenticationManager,
+	var userService: UserService): ServerSecurityContextRepository{
+	
 	
 	override fun save(exchange: ServerWebExchange?, context: SecurityContext?): Mono<Void>? {
 		return Mono.empty();
@@ -21,39 +29,40 @@ class TodoSecurityContextRepository(var authenticationManager: TodoAuthenticatio
 
 	override fun load(exchange: ServerWebExchange?): Mono<SecurityContext>? {
 		
-		System.out.println("loading security context")
-		
-		if(exchange == null) {
-			return  Mono.empty();
-		}
-		
-		System.out.println("loading security context 1")
-		
-		var request = exchange.getRequest();
-		var authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-
-		if (authHeader != null) {
-			System.out.println("loading security context 3")
-			var authToken = authHeader;
-			var auth = UsernamePasswordAuthenticationToken(authToken, authToken);
-			var authMono = this.authenticationManager.authenticate(auth)
-			if(authMono == null){
-				System.out.println("loading security context 4")
-				return  Mono.empty();
+		return Mono.justOrEmpty(exchange)
+			.map{it!!.getRequest()}
+			.flatMap{authTokenFromRequest(it)}
+			.map{
+				print("TOKEN: " + it)
+				UsernamePasswordAuthenticationToken(it, it)
 			}
-			
-			var user = User("adr@om.po")
-			var userData = TodoUserDetails(user)
-			var auth2 = UsernamePasswordAuthenticationToken(userData, null, userData.getAuthorities())
-			System.out.println("loading security context 5" + auth.isAuthenticated())
-			return Mono.just(SecurityContextImpl(auth2))
+			.flatMap{
+				print("\nAUTH: " + it)
+				authenticationManager.authenticate(it)
+			}
+			.map{readPrincipal(it.getPrincipal())}
+			.map{
+				System.out.println("\nPRINICIPAL " + it.getUsername())
+				it.getUsername()
+			}
+			.map{
+				print("\nEmail: " + it)
+				userService.findByEmail(it)}
+			.flatMap{Mono.justOrEmpty(it)}
+			.map{TodoUserDetails(it!!)}
+			.map{UsernamePasswordAuthenticationToken(it, null, it.getAuthorities())}
+			.map{SecurityContextImpl(it)}
+	}
 	
-
-		} else {
-			System.out.println("loading security context 6")
-			return Mono.empty();
-		}
-		
-		
+	fun readPrincipal(principalObj: Any): UserDetails {
+		if(principalObj is UserDetails) {
+			return principalObj
+		} 
+		throw IllegalStateException("Invalid Principal type. Expected UserDetails, got " + principalObj::class)
+	}
+	
+	fun authTokenFromRequest(request: ServerHttpRequest): Mono<String> {
+		var authToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION)
+		return Mono.justOrEmpty(authToken)
 	}
 }
