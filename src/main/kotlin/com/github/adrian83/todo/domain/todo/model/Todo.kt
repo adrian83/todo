@@ -4,9 +4,11 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
+import javax.persistence.Column
 
 @Entity
 data class Todo(
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
-	val text: String) {
+	val text: String,
+	@Column(name="user_id") val userId: Long) {
 }

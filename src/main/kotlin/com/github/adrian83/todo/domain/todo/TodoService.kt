@@ -12,7 +12,9 @@ class TodoService(val todoRepository: TodoRepository){
 	
 	fun list(): List<Todo> = todoRepository.findAll()
 	
+	fun listByUser(userId: Long): List<Todo> = todoRepository.findAllByUserId(userId)
+	
 	fun findById(id: Long): Todo? = todoRepository.findById(id).orElse(null) // TODO: fix this
 	
-	fun update(todo: Todo) = todoRepository.save(todo)
+	fun update(todo: Todo): Int = todoRepository.update(todo.text, todo.id, todo.userId)
 }

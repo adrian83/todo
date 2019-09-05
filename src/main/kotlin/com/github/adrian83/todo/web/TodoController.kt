@@ -12,11 +12,13 @@ import java.util.Optional
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import java.security.Principal
+import com.github.adrian83.todo.domain.user.UserService
 
 
 @RestController
 @RequestMapping(value=arrayOf(TodoController.API_PREFIX))
-class TodoController(val todoService: TodoService) {
+class TodoController(val todoService: TodoService,
+					 val userService: UserService) {
 
 	companion object {
         const val API_PREFIX = "api/v1/"
@@ -26,23 +28,31 @@ class TodoController(val todoService: TodoService) {
 	
 	@PostMapping(RES_PREFIX)
 	fun persist(principal: Principal, @RequestBody newTodo: NewTodo): Todo {
-		print("PRINCIPAL: " + principal.getName())
-		return todoService.persist(Todo(0L, newTodo.text))
+		val user = userService.findByEmail(principal.getName())
+		return todoService.persist(Todo(0L, newTodo.text, user!!.id))
 	}
 	
 	
 	@GetMapping(RES_PREFIX)
-	fun findAll(): List<Todo> = todoService.list()
+	fun findAll(principal: Principal): List<Todo> {
+		val user = userService.findByEmail(principal.getName())
+		return todoService.listByUser(user!!.id)
+	}
 
 	
 	@GetMapping(RES_PREFIX+"/{id}")
-	fun findById(@PathVariable id:Long): Todo? = todoService.findById(id)
+	fun findById(principal: Principal, @PathVariable id:Long): Todo? {
+		val user = userService.findByEmail(principal.getName())
+		// use user.id
+		return todoService.findById(id)
+	} 
 	
 	
 	@PutMapping(RES_PREFIX+"/{id}")
-	fun update(@PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo {
-		var todo = Todo(id, newTodo.text)
-		return todoService.update(todo)
+	fun update(principal: Principal, @PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo? {
+		val user = userService.findByEmail(principal.getName())
+		var todo = Todo(id, newTodo.text, user!!.id)
+		return if(todoService.update(todo) > 0) todo else null 
 	} 
 	
 }
