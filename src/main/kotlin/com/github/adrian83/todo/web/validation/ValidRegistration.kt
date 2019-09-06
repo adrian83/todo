@@ -13,13 +13,4 @@ import javax.validation.Payload
 @MustBeDocumented
 annotation class ValidRegistration(val message: String = "",
 								   val groups: Array<KClass<*>> = [],
-								   val payload: Array<KClass<in Payload>> = []) {
-	
-	//fun message(): String = "{org.hibernate.validator.referenceguide.chapter06.classlevel.ValidPassengerCount.message}";
-
-    //fun groups(): Class<?>[] = default { };
-
-    //Class<? extends Payload>[] payload() default { };
-	
-	
-}
+								   val payload: Array<KClass<in Payload>> = []) {}

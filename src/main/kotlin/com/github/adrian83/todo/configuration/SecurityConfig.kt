@@ -22,7 +22,6 @@ import com.github.adrian83.todo.security.TodoAuthenticationManager
 @EnableWebFluxSecurity
 class SecurityConfig  {
 	
-	
 	@Bean
 	fun securitygWebFilterChain(http: ServerHttpSecurity,
 								authenticationManager: TodoAuthenticationManager,
@@ -31,7 +30,8 @@ class SecurityConfig  {
 		.httpBasic().disable()
 		.formLogin().disable()
 		.csrf().disable()
-		.authorizeExchange() 
+		.authorizeExchange()
+		.pathMatchers("/h2-console").permitAll()
 		.pathMatchers("/api/v1/auth/**").permitAll()
 		.pathMatchers("/api/v1/**").authenticated()
 		.anyExchange().authenticated()

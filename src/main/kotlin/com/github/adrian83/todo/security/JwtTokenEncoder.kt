@@ -15,7 +15,6 @@ class JwtTokenEncoder {
 	
 	companion object {
         const val SECRET = "niufr92hrfu2h3rhweuf9234yhfuio2"
-		val UTC_DATETIME_OFFSET = OffsetDateTime.now(ZoneOffset.UTC)
 		val SYGNATURE_ALGORITHM = SignatureAlgorithm.HS256
 		
 		const val USER_ID = "userID"
@@ -43,13 +42,15 @@ class JwtTokenEncoder {
 	fun tokenFromString(tokenAsStr: String): AuthToken {
 		
 		var key = SecretKeySpec(SECRET.toByteArray(), SYGNATURE_ALGORITHM.getValue())
-		var jwtClaims = Jwts.parser().setSigningKey(key).parseClaimsJws(tokenAsStr)
-		var claims = jwtClaims.getBody()
+		var claims = Jwts.parser()
+			.setSigningKey(key)
+			.parseClaimsJws(tokenAsStr)
+			.getBody()
 		
-		var userIdStr = claims.get(USER_ID).toString()
+		var userId = claims.get(USER_ID).toString().toLong()
 		var userEmail = claims.get(USER_EMAIL).toString()
 		
-		return AuthToken(userIdStr.toLong(), userEmail)
+		return AuthToken(userId, userEmail)
 	}
 	
 }

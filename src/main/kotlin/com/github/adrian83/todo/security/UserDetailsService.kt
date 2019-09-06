@@ -12,7 +12,6 @@ class TodoUserDetailsService(val userService: UserService): ReactiveUserDetailsS
 	
 	override fun findByUsername(email: String): Mono<UserDetails> {
 		var user = userService.findByEmail(email)
-		print("\nUser: " + user)
 		return Mono.justOrEmpty(user)
 			.map{TodoUserDetails(it!!)}
 	}

@@ -13,15 +13,12 @@ class TodoAuthenticationManager(
 	var jwtTokenEncoder: JwtTokenEncoder): ReactiveAuthenticationManager {
 	
 	override fun authenticate(authentication: Authentication): Mono<Authentication>? {
-		print("Authenticate")
+
 		var tokenStr = authentication.getCredentials().toString()
 		var authToken = jwtTokenEncoder.tokenFromString(tokenStr)
-		
-		print("\ntoken: " + authToken)
 		var userDetailsMono = userDetailsService.findByUsername(authToken.email)
 		
 		return userDetailsMono.map{
-			print("\nserdetails: " + it.password)
 			UsernamePasswordAuthenticationToken(it, null, it.getAuthorities())
 		}
 	}

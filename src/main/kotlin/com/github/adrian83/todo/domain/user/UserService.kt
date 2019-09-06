@@ -11,8 +11,8 @@ class UserService (val userRepository: UserRepository){
 	
 	fun persist(user: User): User = userRepository.save(user)
 	
-	fun findByEmail(email: String): User? {
-		return userRepository.findByEmail(email)
-	} 
+	fun findByEmail(email: String): User? = userRepository.findByEmail(email)
+	
+	fun listAll(): List<User> = userRepository.findAll()
 	
 }

@@ -43,8 +43,7 @@ class TodoController(val todoService: TodoService,
 	@GetMapping(RES_PREFIX+"/{id}")
 	fun findById(principal: Principal, @PathVariable id:Long): Todo? {
 		val user = userService.findByEmail(principal.getName())
-		// use user.id
-		return todoService.findById(id)
+		return todoService.findByIdAndUser(id, user!!.id)
 	} 
 	
 	

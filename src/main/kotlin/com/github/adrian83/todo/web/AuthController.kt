@@ -20,10 +20,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.validation.ObjectError
 import com.github.adrian83.todo.security.exception.InvalidEmailOrPasswordException
+import com.github.adrian83.todo.domain.user.UserService
+import org.springframework.web.bind.annotation.GetMapping
 
 @RestController
 @RequestMapping(value=arrayOf(TodoController.API_PREFIX))
-class AuthController(val authService: AuthService) {
+class AuthController(
+	val authService: AuthService,
+	val userService: UserService) {
 
 	companion object {
         const val API_PREFIX = "api/v1/"
@@ -42,11 +46,14 @@ class AuthController(val authService: AuthService) {
 		response.getHeaders().add(HttpHeaders.AUTHORIZATION, jwtToken);
 	}
 	
+	@GetMapping(RES_PREFIX + "/users")
+	fun listAll(): List<User> = userService.listAll()
+	
 	
     @ExceptionHandler(value=arrayOf(RuntimeException::class))
     fun handleRunTimeException(ex: RuntimeException): ResponseEntity<out Any> {
 		
-		System.out.println("Class" + ex::class)
+		print("Class" + ex::class)
 		ex.printStackTrace()
 		
 		if(ex is MethodArgumentNotValidException){

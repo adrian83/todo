@@ -15,7 +15,9 @@ class AuthService(val userService: UserService,
 				  val passwordEncoder: PasswordEncoder,
 				  val jwtTokenEncoder: JwtTokenEncoder) {
 	
+	
 	fun register(email: String, password: String): User {
+		
 		var hash = passwordEncoder.hash(password)
 		var user = User(0, email, hash)
 		return userService.persist(user)
