@@ -11,7 +11,7 @@ interface TodoRepository : JpaRepository <Todo, Long> {
 	
 	fun findAllByUserId(userId: Long): List<Todo>
 	
-	@Query("SELECT Todo t WHERE t.id = :id AND t.userId = :userId")
+	@Query("SELECT t FROM Todo t WHERE t.id = :id AND t.userId = :userId")
 	fun findByIdAndUser(@Param("id") id: Long, @Param("userId") userId: Long): Todo?
 	
 	@Modifying
