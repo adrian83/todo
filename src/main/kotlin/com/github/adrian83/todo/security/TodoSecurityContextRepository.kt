@@ -32,22 +32,11 @@ class TodoSecurityContextRepository(
 		return Mono.justOrEmpty(exchange)
 			.map{it!!.getRequest()}
 			.flatMap{authTokenFromRequest(it)}
-			.map{
-				print("TOKEN: " + it)
-				UsernamePasswordAuthenticationToken(it, it)
-			}
-			.flatMap{
-				print("\nAUTH: " + it)
-				authenticationManager.authenticate(it)
-			}
+			.map{UsernamePasswordAuthenticationToken(it, it)}
+			.flatMap{authenticationManager.authenticate(it)}
 			.map{readPrincipal(it.getPrincipal())}
-			.map{
-				System.out.println("\nPRINICIPAL " + it.getUsername())
-				it.getUsername()
-			}
-			.map{
-				print("\nEmail: " + it)
-				userService.findByEmail(it)}
+			.map{it.getUsername()}
+			.map{userService.findByEmail(it)}
 			.flatMap{Mono.justOrEmpty(it)}
 			.map{TodoUserDetails(it!!)}
 			.map{UsernamePasswordAuthenticationToken(it, null, it.getAuthorities())}
