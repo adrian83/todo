@@ -1,0 +1,12 @@
+<h3>Login</h3>
+<div>
+    <label>email:</label> 
+    <input #email />
+    
+    <label>password:</label> 
+    <input #password />
+
+    <button (click)="login(email.value, password.value);">
+        Login
+    </button>
+  </div>

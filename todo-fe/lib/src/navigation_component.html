@@ -1,0 +1,16 @@
+<h3>navigation</h3>
+
+<div>
+
+    <nav>
+        <a [routerLink]="RoutePaths.register.toUrl()"
+            [routerLinkActive]="'active'">Register</a>
+        <a [routerLink]="RoutePaths.login.toUrl()"
+            [routerLinkActive]="'active'">Login</a>
+        <a [routerLink]="RoutePaths.todos.toUrl()"
+            [routerLinkActive]="'active'">Todos</a>
+    </nav>
+
+    <router-outlet [routes]="Routes.all"></router-outlet>
+
+</div>

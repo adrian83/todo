@@ -1,0 +1,15 @@
+<h3>Register</h3>
+<div>
+    <label>email:</label> 
+    <input #email />
+    
+    <label>password:</label> 
+    <input #password />
+
+    <label>repeatedPassword:</label> 
+    <input #repeatedPassword />
+
+    <button (click)="register(email.value, password.value, repeatedPassword.value);">
+        Register
+    </button>
+  </div>
