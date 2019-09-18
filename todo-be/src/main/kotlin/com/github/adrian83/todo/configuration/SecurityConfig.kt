@@ -16,6 +16,7 @@ import com.github.adrian83.todo.security.TodoSecurityContextRepository
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import com.github.adrian83.todo.security.TodoAuthenticationManager
+import org.springframework.http.HttpMethod
 
 
 @Configuration
@@ -31,7 +32,8 @@ class SecurityConfig  {
 		.formLogin().disable()
 		.csrf().disable()
 		.authorizeExchange()
-		.pathMatchers("/h2-console").permitAll()
+		.pathMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
+		//.pathMatchers("/h2-console").permitAll()
 		.pathMatchers("/api/v1/auth/**").permitAll()
 		.pathMatchers("/api/v1/**").authenticated()
 		.anyExchange().authenticated()
