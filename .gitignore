@@ -33,3 +33,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+.DS_Store
+todo-fe/.DS_Store
+todo-fe/.dart_tool/
+todo-fe/.packages
+todo-fe/pubspec.lock
+todo-fe/web/.DS_Store
