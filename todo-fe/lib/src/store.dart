@@ -14,7 +14,9 @@ class Store {
   }
 
   String getAuthToken() {
-    return _data[_tokenKey];
+    var token = _data[_tokenKey];
+    print("AUTH TOKEN $token");
+    return token;
   }
 
 }

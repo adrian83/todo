@@ -54,9 +54,8 @@ class AuthService {
       var headers = response.headers;
       print("headers $headers");
       var authToken = headers['authorization'];
-      var authToken2 = headers['Authorization'];
+
       print("1 $authToken");
-      print("2 $authToken2");
 
       _store.storeAuthToken(authToken);
 

@@ -38,6 +38,12 @@ class TodoListComponent implements OnInit {
     print("todos: $todos");
   }
 
+  void create(String text) async {
+    var authToken = _store.getAuthToken();
+    var todo = await _todoService.create(authToken, text);
+    todos.insert(0, todo);
+  }
+
 }
 
 

@@ -18,12 +18,9 @@ class NavigationComponent implements OnInit {
 
   final Router _router;
 
-
   NavigationComponent(this._router);
 
-  void ngOnInit(){
-
-  }
+  void ngOnInit(){}
 
 }
 
