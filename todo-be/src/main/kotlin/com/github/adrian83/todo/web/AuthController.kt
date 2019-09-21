@@ -42,6 +42,7 @@ class AuthController(
 	
 	@PostMapping(RES_PREFIX + "/login")
 	fun login(@Valid @RequestBody login: Login, response: ServerHttpResponse) {
+		print("test")
 		var jwtToken = authService.login(login.email, login.password)
 		response.getHeaders().add(HttpHeaders.AUTHORIZATION, jwtToken);
 	}
