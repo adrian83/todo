@@ -18,6 +18,7 @@ import 'src/store.dart';
         <menu></menu>
         
         <div class="container text-center">
+          <br/>
 
           <router-outlet [routes]="Routes.all"></router-outlet>
         

@@ -44,3 +44,4 @@ todo-fe/.dart_tool/
 todo-fe/.packages
 todo-fe/pubspec.lock
 todo-fe/web/.DS_Store
+todo-fe/lib/generated_consts.dart
