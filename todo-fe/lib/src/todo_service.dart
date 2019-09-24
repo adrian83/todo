@@ -46,16 +46,11 @@ class TodoService {
     }
   }
 
-  Future<Todo> create(String authToken, String text) async {
-    try {
+  Future<Response> create(String authToken, String text) async {
       final headers2 = {'Authorization': authToken};
       headers2.addAll(_headers);
-      final response = await _http.post(_todosApi(),
+      return _http.post(_todosApi(),
           headers: headers2, body: json.encode({'text': text}));
-      return Todo.fromJson(_extractData(response));
-    } catch (e) {
-      throw _handleError(e);
-    }
   }
 
   Future<Todo> update(Todo todo) async {

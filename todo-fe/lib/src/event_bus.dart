@@ -3,10 +3,10 @@ import 'dart:async';
 
 class EventBus {
 
-    final StreamController<bool> _onLoginEvent = new StreamController<bool>();
+    final StreamController<bool> _onLoginEvent = StreamController<bool>();
     Stream<bool> onLoginStream = null;
 
-    static final EventBus _singleton = new EventBus._internal(); 
+    static final EventBus _singleton = EventBus._internal(); 
 
     factory EventBus() {
       return _singleton;

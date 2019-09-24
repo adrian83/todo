@@ -1,6 +1,16 @@
 <h3>Register</h3>
 <br/>
 
+<div>
+    <error [message]="errorMsg" [hide]="hideError" ></error>
+</div>
+<div>
+    <validation [violations]="violations" [hide]="hideConstraintViolation" ></validation>
+</div>
+<div>
+    <info [message]="infoMsg" [hide]="hideInfo" ></info>
+</div>
+
 <dev>
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
