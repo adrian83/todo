@@ -33,7 +33,6 @@ class SecurityConfig  {
 		.csrf().disable()
 		.authorizeExchange()
 		.pathMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
-		//.pathMatchers("/h2-console").permitAll()
 		.pathMatchers("/api/v1/auth/**").permitAll()
 		.pathMatchers("/api/v1/**").authenticated()
 		.anyExchange().authenticated()

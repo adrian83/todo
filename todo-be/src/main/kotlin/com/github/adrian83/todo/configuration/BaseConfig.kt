@@ -32,24 +32,4 @@ class BaseConfig {
     	return messageSource;
 	}
 	
-//	@Bean
-//	fun corsWebFilter(): CorsWebFilter {
-//		
-//		print("filter start")
-//		
-//		var corsConfig = CorsConfiguration()
-//		corsConfig.setAllowedOrigins(listOf(frontendOrigin))
-//		corsConfig.setMaxAge(8000L)
-//		corsConfig.addAllowedMethod(HttpMethod.POST)
-//		corsConfig.addAllowedMethod(HttpMethod.PUT)
-//
-//		var source = UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", corsConfig);
-//
-//		print("filter end")
-//		
-//		return CorsWebFilter(source);
-//	}
-	
-
 }

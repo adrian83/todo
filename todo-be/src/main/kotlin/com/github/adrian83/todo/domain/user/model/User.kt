@@ -4,14 +4,15 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
+import javax.persistence.Column
 
 
 
 @Entity
 data class User(
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
-	val email: String,
-	val passwordHash: String?) {
+	@Column(unique=true) val email: String,
+	@Column(name="password_hash") val passwordHash: String?) {
 	
 	constructor(email: String) : this(0, email, null){}
 }
