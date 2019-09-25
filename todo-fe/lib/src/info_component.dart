@@ -13,10 +13,5 @@ class InfoComponent  {
   @Input()
   Function hide;
 
-void close() {
-  print("close");
-  hide();
-}
-
-
+  void close() => hide();
 }

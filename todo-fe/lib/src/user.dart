@@ -27,3 +27,8 @@ class Login {
 }
 
 int _toInt(id) => id is int ? id : int.parse(id);
+
+class UnauthorizedException implements Exception {
+  String cause;
+  UnauthorizedException(this.cause);
+}

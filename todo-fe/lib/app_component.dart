@@ -1,11 +1,8 @@
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
-// import 'package:todo_fe/src/auth_service.dart';
 
 import 'src/routes.dart';
 import 'src/route_paths.dart';
-
-import 'src/navigation_component.dart';
 import 'src/menu_component.dart';
 import 'src/auth_service.dart';
 import 'src/todo_service.dart';
@@ -31,7 +28,7 @@ import 'src/store.dart';
           </footer>
         </div>
         ''',
-  directives: [routerDirectives, NavigationComponent, MenuComponent],
+  directives: [routerDirectives, MenuComponent],
   providers: [
     ClassProvider(AuthService), 
     ClassProvider(TodoService), 

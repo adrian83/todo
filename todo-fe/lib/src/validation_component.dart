@@ -15,7 +15,5 @@ class ValidationComponent  {
   @Input()
   Function hide;
 
-  void close() {
-    hide();
-  }
+  void close() => hide();
 }

@@ -30,12 +30,30 @@
   <!-- border-secondary border-success border-danger border-warning border-info border-light border-dark -->
   <div class="card border-primary mb-3">
     <div class="card-header text-right">
-        <i class="fas fa-edit"></i>
-        <i class="far fa-trash-alt"></i>
+
+        <button (click)="select(todo);" class="btn btn-primary">
+          <i class="fas fa-edit"></i>
+        </button>
+
+        <button (click)="delete(todo.id);" class="btn btn-primary">
+          <i class="far fa-trash-alt"></i>
+        </button>
+        
     </div>
     <div class="card-body text-primary">
-      <!-- <h5 class="card-title">Primary card title</h5> -->
-      <p class="card-text">{{todo.text}}</p>
+      <!-- <h5 class="card-title"
+          *ngIf="updated == todo.id" >Edit</h5> -->
+
+
+      <p class="card-text" *ngIf="selected == null || (selected != null && selected.id != todo.id)" >{{todo.text}}</p>
+
+      <div *ngIf="selected != null && selected.id == todo.id">
+        <div class="form-group">
+          <input type="text" class="form-control" id="textInput" placeholder="Enter text" [(ngModel)]="selected.text">
+        </div>
+        <button (click)="update();" class="btn btn-primary">Update</button>
+      </div>
+
     </div>
   </div>
 </div>
