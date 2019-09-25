@@ -15,7 +15,11 @@ interface TodoRepository : JpaRepository <Todo, Long> {
 	fun findByIdAndUser(@Param("id") id: Long, @Param("userId") userId: Long): Todo?
 	
 	@Modifying
-	@Query("UPDATE Todo t set t.text = :text where t.id = :id AND t.userId = :userId")
+	@Query("UPDATE Todo t set t.text = :text WHERE t.id = :id AND t.userId = :userId")
 	fun update(@Param("text") text: String, @Param("id") id: Long, @Param("userId") userId: Long): Int 
+	
+	@Modifying
+	@Query("DELETE Todo t WHERE t.id = :id AND t.userId = :userId")
+	fun deleteByIdAndUser(@Param("id") id: Long, @Param("userId") userId: Long): Int
 	
 }

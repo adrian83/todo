@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import java.security.Principal
 import com.github.adrian83.todo.domain.user.UserService
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.DeleteMapping
 
 
 @RestController
@@ -67,6 +68,15 @@ class TodoController(val todoService: TodoService,
 		val user = userService.findByEmail(principal.getName())
 		var todo = Todo(id, newTodo.text, user!!.id)
 		return if(todoService.update(todo) > 0) todo else null 
+	}
+	
+	@DeleteMapping(RES_PREFIX+"/{id}")
+	fun delete(principal: Principal, @PathVariable id:Long) {
+		
+		logger.info("removing todo with id $id by ${principal.getName()}")
+		
+		val user = userService.findByEmail(principal.getName())
+		todoService.deleteByIdAndUser(id, user!!.id)
 	} 
 	
 }

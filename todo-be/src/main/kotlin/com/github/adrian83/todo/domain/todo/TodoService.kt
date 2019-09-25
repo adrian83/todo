@@ -16,4 +16,5 @@ class TodoService(val todoRepository: TodoRepository){
 	
 	fun update(todo: Todo): Int = todoRepository.update(todo.text, todo.id, todo.userId)
 	
+	fun deleteByIdAndUser(id: Long, userId: Long) = todoRepository.deleteByIdAndUser(id, userId)
 }
