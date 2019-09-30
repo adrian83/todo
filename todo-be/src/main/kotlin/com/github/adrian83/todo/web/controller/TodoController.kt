@@ -15,6 +15,13 @@ import java.security.Principal
 import com.github.adrian83.todo.domain.user.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.DeleteMapping
+import javax.validation.Valid
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.support.WebExchangeBindException
+import com.github.adrian83.todo.security.model.ConstraintViolation
+import org.springframework.http.HttpStatus
 
 
 @RestController
@@ -31,7 +38,7 @@ class TodoController(val todoService: TodoService,
 	
 	
 	@PostMapping(RES_PREFIX)
-	fun persist(principal: Principal, @RequestBody newTodo: NewTodo): Todo {
+	fun persist(principal: Principal, @Valid @RequestBody newTodo: NewTodo): Todo {
 		
 		logger.info("creating new todo: $newTodo by ${principal.getName()}")
 		
@@ -61,7 +68,7 @@ class TodoController(val todoService: TodoService,
 	
 	
 	@PutMapping(RES_PREFIX+"/{id}")
-	fun update(principal: Principal, @PathVariable id:Long, @RequestBody newTodo: NewTodo): Todo? {
+	fun update(principal: Principal, @PathVariable id:Long, @Valid @RequestBody newTodo: NewTodo): Todo? {
 		
 		logger.info("getting todo with id $id by ${principal.getName()}")
 		
@@ -77,6 +84,29 @@ class TodoController(val todoService: TodoService,
 		
 		val user = userService.findByEmail(principal.getName())
 		todoService.deleteByIdAndUser(id, user!!.id)
-	} 
+	}
+	
+	    @ExceptionHandler(value=arrayOf(RuntimeException::class))
+    fun handleRunTimeException(ex: RuntimeException): ResponseEntity<out Any> {
+		
+		logger.info("exception [${ex::class}] with message: ${ex.message}")
+		ex.printStackTrace()
+		
+		if(ex is MethodArgumentNotValidException){
+			
+			var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)}
+			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
+			
+		} else if(ex is WebExchangeBindException){
+			
+			var violations = ex.getAllErrors().map {
+				ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)
+			}
+			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
+			
+		} 
+		
+        return ResponseEntity<String>(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
 	
 }

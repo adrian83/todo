@@ -11,6 +11,7 @@ import com.github.adrian83.todo.security.exception.InvalidEmailOrPasswordExcepti
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import com.github.adrian83.todo.security.exception.EmailAlreadyUserException
+import org.hibernate.exception.ConstraintViolationException
 
 @Service
 @Transactional
@@ -24,25 +25,35 @@ class AuthService(val userService: UserService,
 	
 	fun register(email: String, password: String): User {
 		
-		var hash = passwordEncoder.hash(password)
-		var user = User(0, email, hash)
+		logger.info("registering user with email: $email")
+		
 		try {
-		return userService.persist(user)
+			var hash = passwordEncoder.hash(password)
+			var user = User(0, email, hash)
+			return userService.persist(user)
 		} catch(ex: DataIntegrityViolationException) {
+			logger.warn("cannot register user because of: ${ex.message}")
 			throw EmailAlreadyUserException("user with this email is already registered")
+		} catch(ex: ConstraintViolationException){
+			logger.warn("cannot register user because of: ${ex.message}")
+			throw EmailAlreadyUserException("user with this email is already registered")
+		} catch(ex: Exception) {
+			throw EmailAlreadyUserException("test")
 		}
 	}
 	
 	fun login(email: String, password: String): String {
 		
+		logger.info("signing in user with email: $email")
+		
 		var user = userService.findByEmail(email)
 		if(user == null){
-			logger.warn("Cannot find user with email: $email")
+			logger.warn("cannot find user with email: $email")
 			throw InvalidEmailOrPasswordException("Invalid email or password")
 		}
 		
 		if(!passwordEncoder.compare(password, user.passwordHash?:"")){
-			logger.warn("Password verification failed for user with email: $email")
+			logger.warn("password verification failed for user with email: $email")
 			throw InvalidEmailOrPasswordException("Invalid email or password")
 		}
 	

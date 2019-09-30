@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Email
 import javax.validation.GroupSequence
 import javax.validation.Valid
+import javax.validation.constraints.Size
 
 
 
@@ -16,9 +17,17 @@ class Registration (
 	
 	@get:NotEmpty(message="{validation.registration.email.empty}")
 	@get:Email(message="{validation.registration.email.invalid}")
+	@get:Size.List(
+		Size(min=5, message="{validation.registration.email.minlen}"),
+		Size(max=250, message="{validation.registration.email.maxlen}")
+	)
 	val email: String?,
 	
 	@get:NotEmpty(message="{validation.registration.password.empty}")
+		@get:Size.List(
+		Size(min=1, message="{validation.registration.password.minlen}"),
+		Size(max=100, message="{validation.registration.password.maxlen}")
+	)
 	val password: String?,
 					
 	@get:NotEmpty(message="{validation.registration.repeatedPassword.empty}")

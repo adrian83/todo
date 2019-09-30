@@ -15,7 +15,7 @@ import org.springframework.security.web.server.context.WebSessionServerSecurityC
 import com.github.adrian83.todo.security.TodoSecurityContextRepository
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.authentication.ReactiveAuthenticationManager
-import com.github.adrian83.todo.security.TodoAuthenticationManager
+import com.github.adrian83.todo.security.AuthenticationManager
 import org.springframework.http.HttpMethod
 
 
@@ -25,7 +25,7 @@ class SecurityConfig  {
 	
 	@Bean
 	fun securitygWebFilterChain(http: ServerHttpSecurity,
-								authenticationManager: TodoAuthenticationManager,
+								authenticationManager: AuthenticationManager,
 								securityContextRepository: TodoSecurityContextRepository): SecurityWebFilterChain {
     return http
 		.httpBasic().disable()

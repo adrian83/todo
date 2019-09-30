@@ -4,7 +4,6 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.security.core.context.SecurityContext
 import reactor.core.publisher.Mono
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -19,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 @Component
 class TodoSecurityContextRepository(
-	var authenticationManager: TodoAuthenticationManager,
+	var authenticationManager: AuthenticationManager,
 	var userService: UserService): ServerSecurityContextRepository{
 	
 	

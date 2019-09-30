@@ -50,7 +50,7 @@ class TodoService {
       }
       return {
         'Content-Type': 'application/json',
-        'Authorization': _store.getAuthToken()
+        'Authorization': authToken
       };
     };
 

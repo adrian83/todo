@@ -35,7 +35,7 @@ class LoginComponent extends FormComponent {
     var authToken = headers['authorization'];
 
     _store.storeAuthToken(authToken);
-    _eventBus.onEvent(true);
+    _eventBus.onEvent(authToken != null);
     _router.navigate(RoutePaths.dashboard.toUrl());
   }
 

@@ -22,5 +22,4 @@ class LogoutComponent implements OnInit {
     _eventBus.onEvent(false);
   }
 
-
 }

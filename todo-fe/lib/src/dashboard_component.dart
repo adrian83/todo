@@ -3,6 +3,7 @@ import 'package:angular_router/angular_router.dart';
 
 import 'route_paths.dart';
 import 'routes.dart';
+import 'store.dart';
 
 
 @Component(
@@ -11,4 +12,17 @@ import 'routes.dart';
   directives: [coreDirectives, routerDirectives],
   exports: [RoutePaths, Routes]
 )
-class DashboardComponent {}
+class DashboardComponent implements OnInit {
+
+  Store _store;
+  Router _router;
+
+  DashboardComponent(this._store, this._router);
+
+  void ngOnInit(){
+    if(_store.getAuthToken() == null){
+      _router.navigate(RoutePaths.login.toUrl());
+    }
+  }
+
+}
