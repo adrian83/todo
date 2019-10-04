@@ -22,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.support.WebExchangeBindException
 import com.github.adrian83.todo.security.model.ConstraintViolation
 import org.springframework.http.HttpStatus
+import com.github.adrian83.todo.domain.exception.NotFoundException
 
 
 @RestController
@@ -47,7 +48,9 @@ class TodoController(val todoService: TodoService,
 	}
 	
 	
-	@GetMapping(RES_PREFIX)
+	@GetMapping(
+		value=[RES_PREFIX],
+		produces=["application/json; charset=utf-8"])
 	fun findAll(principal: Principal): List<Todo> {
 		
 		logger.info("listing all todos of ${principal.getName()}")
@@ -74,7 +77,7 @@ class TodoController(val todoService: TodoService,
 		
 		val user = userService.findByEmail(principal.getName())
 		var todo = Todo(id, newTodo.text, user!!.id)
-		return if(todoService.update(todo) > 0) todo else null 
+		return todoService.update(todo)
 	}
 	
 	@DeleteMapping(RES_PREFIX+"/{id}")
@@ -92,16 +95,17 @@ class TodoController(val todoService: TodoService,
 		logger.info("exception [${ex::class}] with message: ${ex.message}")
 		ex.printStackTrace()
 		
-		if(ex is MethodArgumentNotValidException){
+		if(ex is NotFoundException){
+			return ResponseEntity<String>(ex.message, HttpStatus.NOT_FOUND)
 			
-			var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)}
+		} else if(ex is MethodArgumentNotValidException){
+			
+			var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it)}
 			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
 			
 		} else if(ex is WebExchangeBindException){
 			
-			var violations = ex.getAllErrors().map {
-				ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)
-			}
+			var violations = ex.getAllErrors().map {ConstraintViolation(it)}
 			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
 			
 		} 

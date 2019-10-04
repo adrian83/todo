@@ -75,14 +75,12 @@ class AuthController(
 		
 		if(ex is MethodArgumentNotValidException){
 			
-			var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)}
+			var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it)}
 			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
 			
 		} else if(ex is WebExchangeBindException){
 			
-			var violations = ex.getAllErrors().map {
-				ConstraintViolation(it.getCode()!!, it.getDefaultMessage()!!)
-			}
+			var violations = ex.getAllErrors().map {ConstraintViolation(it)}
 			return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
 			
 		} else if(ex is InvalidEmailOrPasswordException){

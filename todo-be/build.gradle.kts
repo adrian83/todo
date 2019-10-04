@@ -28,8 +28,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.h2database:h2:1.4.199")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
-	//implementation("org.mindrot:jbcrypt:0.4")
-	//runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.security:spring-security-test")
