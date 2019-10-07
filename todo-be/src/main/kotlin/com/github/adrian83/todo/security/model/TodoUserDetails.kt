@@ -1,24 +1,23 @@
 package com.github.adrian83.todo.security
 
-import org.springframework.security.core.userdetails.UserDetails
 import com.github.adrian83.todo.domain.user.model.User
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
-class TodoUserDetails(val user: User): UserDetails {
-	
-	override fun isEnabled(): Boolean = true
+class TodoUserDetails(val user: User) : UserDetails {
 
-	override fun getUsername(): String? = user.email
+    override fun isEnabled(): Boolean = true
 
-	override fun isCredentialsNonExpired(): Boolean = true
+    override fun getUsername(): String? = user.email
 
-	override fun getPassword(): String? = user.passwordHash
+    override fun isCredentialsNonExpired(): Boolean = true
 
-	override fun isAccountNonExpired(): Boolean = true
+    override fun getPassword(): String? = user.passwordHash
 
-	override fun isAccountNonLocked(): Boolean = true
-	
-	override fun getAuthorities(): MutableCollection<out GrantedAuthority>? = mutableListOf(SimpleGrantedAuthority("USER"))
-	
+    override fun isAccountNonExpired(): Boolean = true
+
+    override fun isAccountNonLocked(): Boolean = true
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>? = mutableListOf(SimpleGrantedAuthority("USER"))
 }
