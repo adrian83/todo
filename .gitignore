@@ -4,9 +4,9 @@ build/
 
 todo-be/HELP.md
 todo-be/.gradle
-todo-be/gradle/
+todo-be/gradle/**
 todo-be/build/
-todo-be/bin/
+todo-be/bin/**
 
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
