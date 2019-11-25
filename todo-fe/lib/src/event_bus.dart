@@ -13,7 +13,7 @@ class EventBus {
     }
 
     EventBus._internal() {
-      onLoginStream = _onLoginEvent.stream;
+      onLoginStream = _onLoginEvent.stream.asBroadcastStream();
     }
 
     onEvent(bool signedIn) {
