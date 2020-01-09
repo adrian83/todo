@@ -1,22 +1,20 @@
 import 'dart:async';
 
-
 class EventBus {
+  final StreamController<bool> _onLoginEvent = StreamController<bool>();
+  Stream<bool> onLoginStream = null;
 
-    final StreamController<bool> _onLoginEvent = StreamController<bool>();
-    Stream<bool> onLoginStream = null;
+  static final EventBus _singleton = EventBus._internal();
 
-    static final EventBus _singleton = EventBus._internal(); 
+  factory EventBus() {
+    return _singleton;
+  }
 
-    factory EventBus() {
-      return _singleton;
-    }
+  EventBus._internal() {
+    onLoginStream = _onLoginEvent.stream.asBroadcastStream();
+  }
 
-    EventBus._internal() {
-      onLoginStream = _onLoginEvent.stream.asBroadcastStream();
-    }
-
-    onEvent(bool signedIn) {
-      _onLoginEvent.add(signedIn);
-    }
+  onEvent(bool signedIn) {
+    _onLoginEvent.add(signedIn);
+  }
 }

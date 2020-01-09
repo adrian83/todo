@@ -19,6 +19,5 @@ class AuthService {
 
   Future<Response> register(Register register) async => _http.post(_authApi() + "register", headers: _headers, body: json.encode(register));
 
-  Future<Response> login(Login login) async => _http.post(_authApi() + "login", headers: _headers, body: json.encode(login)); 
-
+  Future<Response> login(Login login) async => _http.post(_authApi() + "login", headers: _headers, body: json.encode(login));
 }

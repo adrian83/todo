@@ -13,7 +13,7 @@ import 'main.template.dart' as self;
   //ClassProvider(Client, useClass: InMemoryDataService),
   // Using a real back end?
   // Import 'package:http/browser_client.dart' and change the above to:
-     ClassProvider(Client, useClass: BrowserClient),
+  ClassProvider(Client, useClass: BrowserClient),
 ])
 final InjectorFactory injector = self.injector$Injector;
 

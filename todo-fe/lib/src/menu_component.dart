@@ -15,17 +15,15 @@ import 'event_bus.dart';
   pipes: [commonPipes],
 )
 class MenuComponent implements OnInit {
-
   EventBus _eventBus;
 
   MenuComponent(this._eventBus);
 
   bool signedIn = false;
 
-  void ngOnInit(){
-    _eventBus.onLoginStream.listen((bool sIn){ 
+  void ngOnInit() {
+    _eventBus.onLoginStream.listen((bool sIn) {
       signedIn = sIn;
     });
   }
-
 }

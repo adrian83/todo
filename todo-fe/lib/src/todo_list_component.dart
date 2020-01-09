@@ -15,25 +15,22 @@ import 'validation_component.dart';
 import 'info_component.dart';
 import 'form_component.dart';
 
-
 @Component(
   selector: 'todo-list',
-  templateUrl: 'todo_list_component.html', 
+  templateUrl: 'todo_list_component.html',
   directives: [coreDirectives, routerDirectives, formDirectives, ErrorComponent, ValidationComponent, InfoComponent],
   exports: [RoutePaths, Routes],
   providers: [ClassProvider(Store), ClassProvider(TodoService)],
   pipes: [commonPipes],
 )
 class TodoListComponent extends FormComponent implements OnInit {
-
   TodoService _todoService;
 
   List<Todo> todos = [];
   Todo selected;
   String editedText;
 
-
-  TodoListComponent(this._todoService, Router router): super(router);
+  TodoListComponent(this._todoService, Router router) : super(router);
 
   void ngOnInit() async {
     handleErrors(_todoService.getAll(), onSuccessfullListing);
@@ -52,7 +49,7 @@ class TodoListComponent extends FormComponent implements OnInit {
   }
 
   void Function(Response response) onSuccessfullDeleting(int id) {
-    void Function(Response response) fun = (response){
+    void Function(Response response) fun = (response) {
       infoMsg = "Todo removed";
       todos.removeWhere((todo) => todo.id == id);
     };
@@ -68,7 +65,7 @@ class TodoListComponent extends FormComponent implements OnInit {
   }
 
   void select(Todo todo) {
-    if(selected != null && editedText != null) {
+    if (selected != null && editedText != null) {
       selected.text = editedText;
     }
     selected = todo;
@@ -77,14 +74,11 @@ class TodoListComponent extends FormComponent implements OnInit {
 
   void onSuccessfullUpdating(Response response) {
     infoMsg = "Todo updated";
-    selected = null; 
+    selected = null;
     editedText = null;
   }
 
   void update() {
     handleErrors(_todoService.update(selected), onSuccessfullUpdating);
   }
-
 }
-
-

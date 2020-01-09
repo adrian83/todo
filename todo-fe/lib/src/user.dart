@@ -4,8 +4,7 @@ class User {
 
   User(this.id, this.email, this.passwordHash);
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      User(_toInt(json['id']), json['email'], json['passwordHash']);
+  factory User.fromJson(Map<String, dynamic> json) => User(_toInt(json['id']), json['email'], json['passwordHash']);
 
   Map toJson() => {'id': id, 'email': email, 'passwordHash': passwordHash};
 }
@@ -13,7 +12,7 @@ class User {
 class Register {
   String email, password, repeatedPassword;
 
-    Register(this.email, this.password, this.repeatedPassword);
+  Register(this.email, this.password, this.repeatedPassword);
 
   Map toJson() => {'email': email, 'password': password, 'repeatedPassword': repeatedPassword};
 }
@@ -21,7 +20,7 @@ class Register {
 class Login {
   String email, password;
 
-    Login(this.email, this.password);
+  Login(this.email, this.password);
 
   Map toJson() => {'email': email, 'password': password};
 }

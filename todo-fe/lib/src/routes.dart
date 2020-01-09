@@ -9,7 +9,6 @@ import 'logout_component.template.dart' as logout_template;
 import 'route_paths.dart';
 
 class Routes {
-
   static final dashboard = RouteDefinition(
     routePath: RoutePaths.dashboard,
     component: dashboard_template.DashboardComponentNgFactory,

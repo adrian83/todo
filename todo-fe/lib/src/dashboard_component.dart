@@ -5,24 +5,16 @@ import 'route_paths.dart';
 import 'routes.dart';
 import 'store.dart';
 
-
-@Component(
-  selector: 'dashboard',
-  templateUrl: 'dashboard_component.html',
-  directives: [coreDirectives, routerDirectives],
-  exports: [RoutePaths, Routes]
-)
+@Component(selector: 'dashboard', templateUrl: 'dashboard_component.html', directives: [coreDirectives, routerDirectives], exports: [RoutePaths, Routes])
 class DashboardComponent implements OnInit {
-
   Store _store;
   Router _router;
 
   DashboardComponent(this._store, this._router);
 
-  void ngOnInit(){
-    if(_store.getAuthToken() == null){
+  void ngOnInit() {
+    if (_store.getAuthToken() == null) {
       _router.navigate(RoutePaths.login.toUrl());
     }
   }
-
 }

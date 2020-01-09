@@ -2,7 +2,6 @@ import 'package:http/http.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 
-
 import 'user.dart';
 import 'auth_service.dart';
 import 'event_bus.dart';
@@ -21,16 +20,14 @@ import 'store.dart';
   pipes: [commonPipes],
 )
 class LoginComponent extends FormComponent {
-
   Router _router;
   AuthService _authService;
   EventBus _eventBus;
   Store _store;
 
-  LoginComponent(this._authService, this._router, this._eventBus, this._store): super(_router);
+  LoginComponent(this._authService, this._router, this._eventBus, this._store) : super(_router);
 
   void onSuccessfullLogin(Response response) {
-
     var headers = response.headers;
     var authToken = headers['authorization'];
 
@@ -44,5 +41,4 @@ class LoginComponent extends FormComponent {
     var login = Login(email, password);
     handleErrors(_authService.login(login), onSuccessfullLogin);
   }
-
 }

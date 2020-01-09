@@ -17,10 +17,9 @@ import 'form_component.dart';
   pipes: [commonPipes],
 )
 class RegisterComponent extends FormComponent {
-
   AuthService _authService;
 
-  RegisterComponent(this._authService, Router router): super(router);
+  RegisterComponent(this._authService, Router router) : super(router);
 
   void onSuccessfullRegister(Response response) {
     infoMsg = "Successfully registered";
@@ -31,5 +30,4 @@ class RegisterComponent extends FormComponent {
     var register = Register(email, password, repeatedPassword);
     handleErrors(_authService.register(register), onSuccessfullRegister);
   }
-
 }

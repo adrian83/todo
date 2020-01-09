@@ -29,11 +29,8 @@ import 'src/store.dart';
         </div>
         ''',
   directives: [routerDirectives, MenuComponent],
-  providers: [
-    ClassProvider(AuthService), 
-    ClassProvider(TodoService), 
-    ClassProvider(Store)],
-  exports: [RoutePaths, Routes], 
+  providers: [ClassProvider(AuthService), ClassProvider(TodoService), ClassProvider(Store)],
+  exports: [RoutePaths, Routes],
 )
 class AppComponent {
   final title = 'Todos';

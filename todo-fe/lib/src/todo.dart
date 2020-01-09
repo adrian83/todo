@@ -7,7 +7,7 @@ class Todo {
   factory Todo.fromText(String text) => Todo(null, text);
 
   factory Todo.fromJson(Map<String, dynamic> json) => Todo(_toInt(json['id']), json['text']);
-  
+
   Map toJson() => {'id': id, 'text': text};
 }
 
