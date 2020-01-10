@@ -5,18 +5,33 @@ Application for managing todo list (with authentication). Application written wi
 
 ## Running
 
-#### Short version
+### Running with docker compose
+
+#### Prerequisites
+- Docker
+- Docker Compose
+
+#### Steps
 1. Run `docker-compose up`
-2. Navigate in brawser to `localhost:8080`
+2. Navigate in browser to `localhost:8080`
 
-#### Longer version
-1. Start backend `cd todo-be && gradle bootRun`
-2. Start frontend `cd todo-fe && npm start`
-3. Navigate in brawser to `localhost:8080`
+### Running locally
+
+#### Prerequisites
+- Docker
+- Java 8
+- Gradle (version < 6)
+- Dart
+- Webdev
+
+#### Steps
+1. Start infrastructure (Elasticsearch and Postgres): `make deps`
+2. Start backend: `make be-all`
+3. Start frontend: `make fe-all`
+4. Navigate in browser to `localhost:8080`
 
 
-## Misc
-
-### Backend formated and linted with [ktlint](https://ktlint.github.io/)
-1. Lint: `gradle ktlint`
-2. Format: `gradle ktlintFormat`
+### Misc
+1. Backend formated and linted with [ktlint](https://ktlint.github.io/)
+- Lint: `gradle ktlint`
+- Format: `gradle ktlintFormat`
