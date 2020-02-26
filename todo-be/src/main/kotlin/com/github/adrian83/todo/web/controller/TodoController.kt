@@ -43,7 +43,7 @@ class TodoController(
         logger.info("creating new todo: $newTodo by ${principal.getName()}")
 
         val user = userService.findByEmail(principal.getName())
-        return todoService.persist(Todo(0L, newTodo.text, user!!.id))
+        return todoService.persist(Todo(0L, newTodo.text, user.id))
     }
 
     @GetMapping(
@@ -54,7 +54,7 @@ class TodoController(
         logger.info("listing all todos of ${principal.getName()}")
 
         val user = userService.findByEmail(principal.getName())
-        return todoService.listByUser(user!!.id)
+        return todoService.listByUser(user.id)
     }
 
     @GetMapping(RES_PREFIX + "/{id}")
@@ -63,7 +63,7 @@ class TodoController(
         logger.info("getting todo with id $id by ${principal.getName()}")
 
         val user = userService.findByEmail(principal.getName())
-        return todoService.findByIdAndUser(id, user!!.id)
+        return todoService.findByIdAndUser(id, user.id)
     }
 
     @PutMapping(RES_PREFIX + "/{id}")
@@ -72,7 +72,7 @@ class TodoController(
         logger.info("getting todo with id $id by ${principal.getName()}")
 
         val user = userService.findByEmail(principal.getName())
-        var todo = Todo(id, newTodo.text, user!!.id)
+        var todo = Todo(id, newTodo.text, user.id)
         return todoService.update(todo)
     }
 
@@ -82,10 +82,10 @@ class TodoController(
         logger.info("removing todo with id $id by ${principal.getName()}")
 
         val user = userService.findByEmail(principal.getName())
-        todoService.deleteByIdAndUser(id, user!!.id)
+        todoService.deleteByIdAndUser(id, user.id)
     }
 
-        @ExceptionHandler(value = arrayOf(RuntimeException::class))
+    @ExceptionHandler(value = arrayOf(RuntimeException::class))
     fun handleRunTimeException(ex: RuntimeException): ResponseEntity<out Any> {
 
         logger.info("exception [${ex::class}] with message: ${ex.message}")

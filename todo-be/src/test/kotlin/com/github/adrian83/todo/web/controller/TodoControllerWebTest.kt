@@ -70,7 +70,7 @@ class TodoControllerWebTest : WebTest() {
     }
 
     @Test
-fun canary() {}
+    fun canary() {}
 
     @Test
     @WithUserDetails(
