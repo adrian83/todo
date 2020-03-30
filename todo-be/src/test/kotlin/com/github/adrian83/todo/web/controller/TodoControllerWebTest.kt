@@ -1,7 +1,6 @@
 package com.github.adrian83.todo.web.controller
 
 import com.github.adrian83.todo.TodoApplication
-import com.github.adrian83.todo.configuration.TodoTestConfiguration
 import com.github.adrian83.todo.domain.todo.TodoService
 import com.github.adrian83.todo.domain.todo.model.Todo
 import com.github.adrian83.todo.domain.user.UserService
@@ -25,9 +24,16 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(
-    classes = [TodoApplication::class, TodoTestConfiguration::class],
+    classes = [TodoApplication::class],
     webEnvironment = WebEnvironment.RANDOM_PORT)
 class TodoControllerWebTest : WebTest() {
+
+    companion object {
+        const val JOHNS_EMAIL = "johndoe@nonexistingdomain.com"
+        const val SANDRAS_EMAIL = "snadrasmith@nonexistingdomain.com"
+
+        const val USER_DETAILS_BEAN = "todoUserDetailsService"
+    }
 
     @LocalServerPort
     var port: Int = 0
@@ -45,17 +51,16 @@ class TodoControllerWebTest : WebTest() {
     fun setup() {
 
         try {
-            val john = User(TodoTestConfiguration.JOHNS_EMAIL)
+            val john = User(TodoControllerWebTest.JOHNS_EMAIL)
             userService.persist(john)
         } catch (ex: DataIntegrityViolationException) {
-            print("Exception ${ex::class.java}  ${ex.cause!!::class.java}")
             // its ok, no need for creating user
+            print("Exception ${ex::class.java}  ${ex.cause!!::class.java}")
         }
 
         try {
-            val sandra = User(TodoTestConfiguration.SANDRAS_EMAIL)
+            val sandra = User(TodoControllerWebTest.SANDRAS_EMAIL)
             userService.persist(sandra)
-
             todoService.persist(Todo(0L, "todo 1", sandra.id))
             todoService.persist(Todo(0L, "todo 2", sandra.id))
         } catch (ex: DataIntegrityViolationException) {
@@ -65,9 +70,12 @@ class TodoControllerWebTest : WebTest() {
     }
 
     @Test
+    fun canary() {}
+
+    @Test
     @WithUserDetails(
-        value = TodoTestConfiguration.JOHNS_EMAIL,
-        userDetailsServiceBeanName = TodoTestConfiguration.USER_DETAILS_BEAN)
+        value = TodoControllerWebTest.JOHNS_EMAIL,
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
     fun shouldReturnEmptyListOfTodos() {
 
         // given
@@ -88,8 +96,8 @@ class TodoControllerWebTest : WebTest() {
 
     @Test
     @WithUserDetails(
-        value = TodoTestConfiguration.SANDRAS_EMAIL,
-        userDetailsServiceBeanName = TodoTestConfiguration.USER_DETAILS_BEAN)
+        value = TodoControllerWebTest.SANDRAS_EMAIL,
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
     fun shouldReturnListOfTodos() {
 
         // given
@@ -108,10 +116,10 @@ class TodoControllerWebTest : WebTest() {
         assertThat(expectedTodos).isNotEmpty()
     }
 
-    @Test
+    // @Test
     @WithUserDetails(
-        value = TodoTestConfiguration.SANDRAS_EMAIL,
-        userDetailsServiceBeanName = TodoTestConfiguration.USER_DETAILS_BEAN)
+        value = TodoControllerWebTest.SANDRAS_EMAIL,
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
     fun shouldPersistNewTodo() {
 
         // given
@@ -126,7 +134,7 @@ class TodoControllerWebTest : WebTest() {
             object : ParameterizedTypeReference<Todo>() {})
 
         val expectedTodo = response.getBody()
-        val signedInUser = userService.findByEmail(TodoTestConfiguration.SANDRAS_EMAIL)
+        val signedInUser = userService.findByEmail(TodoControllerWebTest.SANDRAS_EMAIL)
 
         // then
         assertThat(expectedTodo!!.text).isEqualTo(newTodo.text)

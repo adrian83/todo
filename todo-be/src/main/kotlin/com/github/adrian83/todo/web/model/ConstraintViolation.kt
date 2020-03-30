@@ -7,5 +7,5 @@ class ConstraintViolation(
     val message: String
 ) {
 
-    constructor(objError: ObjectError) : this(objError.getObjectName()!!, objError.getDefaultMessage()!!)
+    constructor(objError: ObjectError) : this(objError.getObjectName(), objError.getDefaultMessage()!!)
 }
