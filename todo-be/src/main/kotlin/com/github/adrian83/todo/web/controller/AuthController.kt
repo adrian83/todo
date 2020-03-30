@@ -10,6 +10,7 @@ import com.github.adrian83.todo.web.model.Login
 import com.github.adrian83.todo.web.model.Registration
 import javax.validation.Valid
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -69,19 +70,18 @@ class AuthController(
         ex.printStackTrace()
 
         if (ex is MethodArgumentNotValidException) {
-
             var violations = ex.getBindingResult().getAllErrors().map { ConstraintViolation(it) }
             return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
         } else if (ex is WebExchangeBindException) {
-
             var violations = ex.getAllErrors().map { ConstraintViolation(it) }
             return ResponseEntity<List<ConstraintViolation>>(violations, HttpStatus.BAD_REQUEST)
         } else if (ex is InvalidEmailOrPasswordException) {
-
             var violation = ConstraintViolation("login", ex.message!!)
             return ResponseEntity<List<ConstraintViolation>>(listOf(violation), HttpStatus.BAD_REQUEST)
+        } else if (ex is DataIntegrityViolationException) {
+            var violation = ConstraintViolation("register", "Email already in use.")
+            return ResponseEntity<List<ConstraintViolation>>(listOf(violation), HttpStatus.BAD_REQUEST)
         } else if (ex is EmailAlreadyUserException) {
-
             var violation = ConstraintViolation("register", ex.message!!)
             return ResponseEntity<List<ConstraintViolation>>(listOf(violation), HttpStatus.BAD_REQUEST)
         }

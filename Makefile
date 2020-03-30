@@ -23,7 +23,8 @@ fe-build:
 
 fe-run: 
 	echo "running frontend"
-	cd todo-fe && webdev serve --hostname 0.0.0.0 --release
+	# cd todo-fe && webdev serve --hostname 0.0.0.0 --release
+	cd todo-fe && pub run build_runner serve --hostname 0.0.0.0 --release
 
 fe-all: fe-format fe-get fe-build fe-run
 
