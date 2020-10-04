@@ -14,7 +14,7 @@ fe-format:
 
 fe-get:
 	echo "getting frontend dependencies" 
-	cd todo-fe && pub get
+	cd todo-fe && pub upgrade && pub get
 
 fe-build: 
 	echo "building frontend"
