@@ -8,7 +8,6 @@ import com.github.adrian83.todo.security.exception.InvalidEmailOrPasswordExcepti
 import com.github.adrian83.todo.security.model.ConstraintViolation
 import com.github.adrian83.todo.web.model.Login
 import com.github.adrian83.todo.web.model.Registration
-import javax.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpHeaders
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.support.WebExchangeBindException
+import javax.validation.Valid
 
 @RestController
 @RequestMapping(value = arrayOf(TodoController.API_PREFIX))

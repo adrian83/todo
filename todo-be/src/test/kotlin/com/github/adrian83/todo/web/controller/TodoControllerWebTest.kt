@@ -25,7 +25,8 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @SpringBootTest(
     classes = [TodoApplication::class],
-    webEnvironment = WebEnvironment.RANDOM_PORT)
+    webEnvironment = WebEnvironment.RANDOM_PORT
+)
 class TodoControllerWebTest : WebTest() {
 
     companion object {
@@ -75,7 +76,8 @@ class TodoControllerWebTest : WebTest() {
     @Test
     @WithUserDetails(
         value = TodoControllerWebTest.JOHNS_EMAIL,
-        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN
+    )
     fun shouldReturnEmptyListOfTodos() {
 
         // given
@@ -86,7 +88,8 @@ class TodoControllerWebTest : WebTest() {
             url(port, "api/v1/todos"),
             HttpMethod.GET,
             request,
-            object : ParameterizedTypeReference<List<Todo>>() {})
+            object : ParameterizedTypeReference<List<Todo>>() {}
+        )
 
         val expectedTodos = response.getBody()
 
@@ -97,7 +100,8 @@ class TodoControllerWebTest : WebTest() {
     @Test
     @WithUserDetails(
         value = TodoControllerWebTest.SANDRAS_EMAIL,
-        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN
+    )
     fun shouldReturnListOfTodos() {
 
         // given
@@ -108,7 +112,8 @@ class TodoControllerWebTest : WebTest() {
             url(port, "api/v1/todos"),
             HttpMethod.GET,
             request,
-            object : ParameterizedTypeReference<List<Todo>>() {})
+            object : ParameterizedTypeReference<List<Todo>>() {}
+        )
 
         val expectedTodos = response.getBody()
 
@@ -119,7 +124,8 @@ class TodoControllerWebTest : WebTest() {
     // @Test
     @WithUserDetails(
         value = TodoControllerWebTest.SANDRAS_EMAIL,
-        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN)
+        userDetailsServiceBeanName = TodoControllerWebTest.USER_DETAILS_BEAN
+    )
     fun shouldPersistNewTodo() {
 
         // given
@@ -131,7 +137,8 @@ class TodoControllerWebTest : WebTest() {
             url(port, "api/v1/todos"),
             HttpMethod.POST,
             request,
-            object : ParameterizedTypeReference<Todo>() {})
+            object : ParameterizedTypeReference<Todo>() {}
+        )
 
         val expectedTodo = response.getBody()
         val signedInUser = userService.findByEmail(TodoControllerWebTest.SANDRAS_EMAIL)

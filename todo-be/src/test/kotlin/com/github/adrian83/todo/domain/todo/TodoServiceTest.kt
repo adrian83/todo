@@ -76,7 +76,8 @@ class TodoServiceTest {
         // given
         val todos = listOf(
             Todo(1L, "this is test", 44),
-            Todo(2L, "this is also test", 44))
+            Todo(2L, "this is also test", 44)
+        )
 
         `when`(todoRepositoryMock.findAllByUserId(anyLong())).thenReturn(todos)
 

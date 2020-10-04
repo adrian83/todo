@@ -2,12 +2,12 @@ package com.github.adrian83.todo.security
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import javax.crypto.spec.SecretKeySpec
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 
 @Component
 class JwtTokenEncoder {
@@ -24,11 +24,13 @@ class JwtTokenEncoder {
 
     fun tokenToString(authToken: AuthToken): String {
 
-        val validUntil = Date.from(LocalDate.now()
+        val validUntil = Date.from(
+            LocalDate.now()
                 .plusDays(5)
                 .atStartOfDay()
                 .atZone(ZoneId.systemDefault())
-            .toInstant())
+                .toInstant()
+        )
 
         return Jwts.builder()
             .setSubject("users")

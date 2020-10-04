@@ -6,8 +6,6 @@ import com.github.adrian83.todo.domain.todo.model.Todo
 import com.github.adrian83.todo.domain.user.UserService
 import com.github.adrian83.todo.security.model.ConstraintViolation
 import com.github.adrian83.todo.web.model.NewTodo
-import java.security.Principal
-import javax.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.support.WebExchangeBindException
+import java.security.Principal
+import javax.validation.Valid
 
 @RestController
 @RequestMapping(value = arrayOf(TodoController.API_PREFIX))
@@ -48,7 +48,8 @@ class TodoController(
 
     @GetMapping(
         value = [RES_PREFIX],
-        produces = ["application/json; charset=utf-8"])
+        produces = ["application/json; charset=utf-8"]
+    )
     fun findAll(principal: Principal): List<Todo> {
 
         logger.info("listing all todos of ${principal.getName()}")

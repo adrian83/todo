@@ -19,18 +19,18 @@ class SecurityConfig {
         authenticationManager: AuthenticationManager,
         securityContextRepository: TodoSecurityContextRepository
     ): SecurityWebFilterChain {
-    return http
-        .httpBasic().disable()
-        .formLogin().disable()
-        .csrf().disable()
-        .authorizeExchange()
-        .pathMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
-        .pathMatchers("/api/v1/auth/**").permitAll()
-        .pathMatchers("/api/v1/**").authenticated()
-        .anyExchange().authenticated()
-        .and()
-        .authenticationManager(authenticationManager)
-        .securityContextRepository(securityContextRepository)
-        .build()
+        return http
+            .httpBasic().disable()
+            .formLogin().disable()
+            .csrf().disable()
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
+            .pathMatchers("/api/v1/auth/**").permitAll()
+            .pathMatchers("/api/v1/**").authenticated()
+            .anyExchange().authenticated()
+            .and()
+            .authenticationManager(authenticationManager)
+            .securityContextRepository(securityContextRepository)
+            .build()
     }
 }

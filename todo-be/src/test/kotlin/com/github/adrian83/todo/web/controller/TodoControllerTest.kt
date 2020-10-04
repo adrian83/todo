@@ -6,7 +6,6 @@ import com.github.adrian83.todo.domain.user.UserService
 import com.github.adrian83.todo.domain.user.model.User
 import com.github.adrian83.todo.web.TodoController
 import com.github.adrian83.todo.web.model.NewTodo
-import javax.security.auth.kerberos.KerberosPrincipal
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,6 +15,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyString
 import org.mockito.junit.MockitoJUnitRunner
+import javax.security.auth.kerberos.KerberosPrincipal
 
 @RunWith(MockitoJUnitRunner::class)
 class TodoControllerTest {

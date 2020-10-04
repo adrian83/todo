@@ -17,7 +17,7 @@ class Registration(
     val email: String?,
 
     @get:NotEmpty(message = "{validation.registration.password.empty}")
-        @get:Size.List(
+    @get:Size.List(
         Size(min = 1, message = "{validation.registration.password.minlen}"),
         Size(max = 100, message = "{validation.registration.password.maxlen}")
     )
