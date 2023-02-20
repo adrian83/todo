@@ -1,19 +1,9 @@
 HELP.md
 .gradle
-gradle
-bin
 build/
-
-
-todo-be/HELP.md
-todo-be/.gradle
-todo-be/gradle/**
-todo-be/build/
-todo-be/bin/**
-
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -23,6 +13,9 @@ todo-be/bin/**
 .settings
 .springBeans
 .sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -30,6 +23,8 @@ todo-be/bin/**
 *.iml
 *.ipr
 out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -40,11 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-.DS_Store
-todo-fe/.DS_Store
-todo-fe/.dart_tool/
-todo-fe/.packages
-todo-fe/pubspec.lock
-todo-fe/web/.DS_Store
-todo-fe/lib/generated_consts.dart
