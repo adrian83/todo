@@ -1,43 +1,60 @@
 package com.github.adrian83.todo.service;
 
-import com.github.adrian83.todo.domain.Note;
-import com.github.adrian83.todo.repository.NoteRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.github.adrian83.todo.domain.Note;
+import com.github.adrian83.todo.domain.Tag;
+import com.github.adrian83.todo.repository.NoteRepository;
+import com.github.adrian83.todo.service.command.CreateNoteCommand;
+import com.github.adrian83.todo.service.command.UpdateNoteCommand;
+import com.github.adrian83.todo.service.exception.NoteNotFoundException;
 
 @Service
 public class NoteService {
 
     private final NoteRepository noteRepository;
+    private final TagService tagService;
 
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(NoteRepository noteRepository, TagService tagService) {
         this.noteRepository = noteRepository;
+        this.tagService = tagService;
     }
 
     @Transactional
-    public Note addNote(Note note) {
+    public Note addNote(CreateNoteCommand createNoteCommand) {
+        Note note = new Note(createNoteCommand.user(), createNoteCommand.title(), createNoteCommand.content());
+        Set<Tag> tags = tagService.listTagsByUserAndIds(createNoteCommand.user().getId(),
+            createNoteCommand.tagIds());
+        
+        note.setTags(tags);
         return noteRepository.save(note);
     }
 
     @Transactional(readOnly = true)
-    public java.util.Optional<Note> findById(Long id) {
+    public Optional<Note> findById(Long id) {
         return noteRepository.findById(id);
     }
 
+    
+
     @Transactional
-    public Note updateNote(Long id, String title, String content) {
-        Note note = noteRepository.findById(id)
-            .orElseThrow(() -> new NoteNotFoundException(id));
-        note.setTitle(title);
-        note.setContent(content);
+    public Note updateNote(UpdateNoteCommand updateNoteCommand) {
+        Note note = noteRepository.findByIdAndUserId(updateNoteCommand.id(), updateNoteCommand.user().getId())
+            .orElseThrow(() -> new NoteNotFoundException(updateNoteCommand.id()));
+        note.setTitle(updateNoteCommand.title());
+        note.setContent(updateNoteCommand.content());
+        note.setTags(tagService.listTagsByUserAndIds(updateNoteCommand.user().getId(), updateNoteCommand.tagIds()));
         return noteRepository.save(note);
     }
 
     @Transactional(readOnly = true)
-    public List<Note> listNotes() {
-        return noteRepository.findAll();
+    public List<Note> listNotesByUser(Long userId) {
+        return noteRepository.findByUserId(userId);
     }
 
     @Transactional

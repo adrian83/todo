@@ -1,0 +1,208 @@
+/* Base styles */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 24px;
+    background: #f7f7f8;
+    color: #222;
+}
+
+/* Headers and typography */
+h1 {
+    margin-top: 16px;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+label {
+    font-weight: 500;
+    color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Buttons */
+button {
+    padding: 8px 16px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #1665cc;
+}
+
+/* Links */
+a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header links */
+.header-links {
+    margin-bottom: 16px;
+}
+
+.header-links a {
+    margin-right: 12px;
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.header-links a:hover {
+    text-decoration: underline;
+}
+
+/* Card layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 16px;
+    width: 320px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card .title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.card .content {
+    color: #444;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.meta {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Actions */
+.actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.actions a,
+.actions button {
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #333;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.actions a:hover,
+.actions button:hover {
+    background-color: #f0f0f0;
+    border-color: #1a73e8;
+    color: #1a73e8;
+}
+
+.actions form {
+    display: inline;
+    margin: 0;
+}
+
+/* Error messages */
+.error-message {
+    color: #d33b27;
+    padding: 8px 12px;
+    background-color: #fce8e6;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+/* Success messages */
+.success-message {
+    color: #137333;
+    padding: 8px 12px;
+    background-color: #e6f4ea;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+/* Field errors */
+.field-error {
+    color: #d33b27;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Content wrapper */
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Cancel link */
+.cancel-link {
+    color: #5f6368;
+    text-decoration: none;
+}
+
+.cancel-link:hover {
+    color: #1a73e8;
+    text-decoration: underline;
+}

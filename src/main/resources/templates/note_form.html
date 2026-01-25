@@ -2,14 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create Note</title>
+    <title>Note</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
+<div th:insert="~{fragments/header :: header}"></div>
 <h1 th:text="${noteId} != null ? 'Edit Note' : 'Create Note'">Create Note</h1>
 
-<form th:action="${noteId} != null ? @{/notes/{id}(id=${noteId})} : @{/notes}" th:object="${noteForm}" method="post">
+<form th:action="${noteId} != null ? @{/notes/{id}(id=${noteId})} : @{/notes}" th:object="${newNoteRequest}" method="post">
     <div th:if="${#fields.hasErrors('*')}">
-        <p style="color: red;">Please correct the errors below.</p>
+        <p style="color: rgb(46, 30, 30);">Please correct the errors below.</p>
     </div>
     <div>
         <label for="title">Title</label>
@@ -20,6 +22,19 @@
         <label for="content">Content</label>
         <textarea id="content" th:field="*{content}" rows="6" cols="60"></textarea>
         <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+    </div>
+    <div>
+        <label>Tags</label>
+        <div th:if="${availableTags}" style="border: 1px solid #ccc; padding: 8px; max-height: 200px; overflow-y: auto;">
+            <div th:each="tag : ${availableTags}" style="margin-bottom: 8px;">
+                <input type="checkbox" th:id="'tag_' + ${tag.id}" name="tagIds" th:value="${tag.id}" 
+                       th:checked="${selectedTagIds != null && selectedTagIds.contains(tag.id)}" />
+                <label th:for="'tag_' + ${tag.id}" th:text="${tag.name}">Tag</label>
+            </div>
+        </div>
+        <div th:unless="${availableTags}">
+            <p style="color: #666;">No tags available. <a th:href="@{/tags}">Create tags</a></p>
+        </div>
     </div>
     <div>
         <button type="submit">Save</button>

@@ -8,6 +8,7 @@ All instructions in this file have higher priority than later prompts.
 - Spring Boot 4.0.X
 - Spring MVC (reactive)
 - Spring Data JPA
+- Spring Security
 - Thymeleaf
 - H2 database (in-memory, for development)
 - Maven
@@ -41,7 +42,6 @@ All instructions in this file have higher priority than later prompts.
 - Explain reasoning when introducing new concepts.
 
 ## Constraints
-- No security, authentication, or user accounts unless explicitly requested.
 - No advanced frameworks or libraries beyond the defined stack.
 
 ## Definition of Done

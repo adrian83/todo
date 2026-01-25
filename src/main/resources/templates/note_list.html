@@ -3,48 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Notes</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 24px;
-            background: #f7f7f8;
-            color: #222;
-        }
-        .header-links a { margin-right:12px; color:#1a73e8; text-decoration:none; }
-        .container { display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; }
-        .card {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            padding: 16px;
-            width: 320px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .card .title { font-weight: 600; font-size: 1.1rem; }
-        .card .content { color: #444; white-space: pre-wrap; }
-        .meta { font-size: 0.85rem; color: #666; }
-        .actions { margin-top: 8px; display:flex; gap:8px; }
-        .actions a, .actions button {
-            background: transparent;
-            border: 1px solid #ddd;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #333;
-            text-decoration: none;
-        }
-        .actions form { display: inline; margin: 0; }
-    </style>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
+<div th:insert="~{fragments/header :: header}"></div>
 <h1>Notes</h1>
 
 <div class="header-links">
     <a th:href="@{/notes/new}">Create new note</a>
-    <a th:href="@{/}">Home</a>
 </div>
 
 <div class="container">
@@ -55,6 +21,9 @@
             <div>ID: <span th:text="${note.id}">1</span></div>
             <div>Created: <span th:text="${note.createdAt}">2026-01-01T00:00:00Z</span></div>
             <div th:if="${note.updatedAt}">Updated: <span th:text="${note.updatedAt}">2026-01-01T00:00:00Z</span></div>
+            <div th:if="${!note.tags.isEmpty()}">
+                Tags: <span th:each="tag : ${note.tags}" th:text="${tag.name}" style="background-color: #e0e0e0; padding: 2px 6px; margin-right: 4px; border-radius: 3px; display: inline-block;">Tag</span>
+            </div>
         </div>
         <div class="actions">
             <a th:href="@{/notes/{id}/edit(id=${note.id})}">Edit</a>

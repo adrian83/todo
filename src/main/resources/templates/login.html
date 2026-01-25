@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<h1>Login</h1>
+
+<div th:if="${param.error}">
+    <p style="color: red;" th:text="${param.error}"></p>
+</div>
+
+<form th:action="@{/login}" th:object="${loginForm}" method="post">
+    <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" th:field="*{username}" />
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" th:field="*{password}" />
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+    <div>
+        <button type="submit">Login</button>
+        <a th:href="@{/}">Cancel</a>
+    </div>
+</form>
+
+<p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+</body>
+</html>

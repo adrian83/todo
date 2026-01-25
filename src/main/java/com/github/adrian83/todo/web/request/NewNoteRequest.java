@@ -1,9 +1,9 @@
-package com.github.adrian83.todo.web;
+package com.github.adrian83.todo.web.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class NoteForm {
+public class NewNoteRequest {
 
     @NotBlank
     @Size(max = 255)
@@ -12,10 +12,10 @@ public class NoteForm {
     @NotBlank
     private String content;
 
-    public NoteForm() {
+    public NewNoteRequest() {
     }
 
-    public NoteForm(String title, String content) {
+    public NewNoteRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }

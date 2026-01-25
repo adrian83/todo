@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Notatki</title>
+    <title>Notes</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
+    <div th:insert="~{fragments/header :: header}"></div>
+
     <h1 th:text="${message}"></h1>
     <p><a th:href="@{/notes/new}">Create a new note</a></p>
     <p><a th:href="@{/notes}">List notes</a></p>

@@ -1,4 +1,4 @@
-package com.github.adrian83.todo.service;
+package com.github.adrian83.todo.service.exception;
 
 public class NoteNotFoundException extends RuntimeException {
 

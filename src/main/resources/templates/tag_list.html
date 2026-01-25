@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<h1>Tags</h1>
+
+<div class="header-links">
+    <a th:href="@{/tags/new}">Create new tag</a>
+</div>
+
+<div class="container">
+    <div th:each="tag : ${tags}" class="card">
+        <div class="title" th:text="${tag.name}">Tag Name</div>
+        <div class="meta">
+            <div>ID: <span th:text="${tag.id}">1</span></div>
+            <div>Created: <span th:text="${tag.createdAt}">2026-01-01T00:00:00Z</span></div>
+            <div th:if="${tag.updatedAt}">Updated: <span th:text="${tag.updatedAt}">2026-01-01T00:00:00Z</span></div>
+        </div>
+        <div class="actions">
+            <a th:href="@{/tags/{id}/edit(id=${tag.id})}">Edit</a>
+            <form th:action="@{/tags/{id}/delete(id=${tag.id})}" method="post" th:object="${tag}">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:if="${param.message}">
+    <p th:text="${param.message}">Message</p>
+</div>
+
+</body>
+</html>
