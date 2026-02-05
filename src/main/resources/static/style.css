@@ -18,6 +18,26 @@ form {
     gap: 12px;
 }
 
+/* App-specific form container for consistent width and spacing */
+.app-form {
+    max-width: 720px;
+    margin-top: 12px;
+}
+
+/* Checkbox / multi-select lists inside forms */
+.checkbox-list {
+    border: 1px solid #ccc;
+    padding: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.checkbox-list div {
+    margin-bottom: 8px;
+    display: flex; 
+    align-items: center; 
+    gap: 8px;
+}
 form div {
     display: flex;
     flex-direction: column;
@@ -205,4 +225,57 @@ a:hover {
 .cancel-link:hover {
     color: #1a73e8;
     text-decoration: underline;
+}
+
+/* Site header styles (replace inline header styles) */
+.site-header {
+    background-color: #f0f0f0;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+.site-header .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.brand a {
+    text-decoration: none;
+    color: #222;
+}
+.header-nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+.header-nav a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+.header-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Tag pill */
+.tag-pill {
+    background-color: #e0e0e0;
+    padding: 2px 6px;
+    margin-right: 4px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* Header helper classes to replace inline spans */
+.user-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.auth-links {
+    display: flex;
+    gap: 16px;
 }

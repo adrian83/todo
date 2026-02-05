@@ -10,7 +10,7 @@ All instructions in this file have higher priority than later prompts.
 - Spring Data JPA
 - Spring Security
 - Thymeleaf
-- H2 database (in-memory, for development)
+- Postgres DB
 - Maven
 
 ## Architecture Rules

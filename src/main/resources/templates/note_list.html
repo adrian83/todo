@@ -9,6 +9,8 @@
 <div th:insert="~{fragments/header :: header}"></div>
 <h1>Notes</h1>
 
+<div th:insert="~{fragments/messages :: form_messages}"></div>
+
 <div class="header-links">
     <a th:href="@{/notes/new}">Create new note</a>
 </div>
@@ -22,12 +24,12 @@
             <div>Created: <span th:text="${note.createdAt}">2026-01-01T00:00:00Z</span></div>
             <div th:if="${note.updatedAt}">Updated: <span th:text="${note.updatedAt}">2026-01-01T00:00:00Z</span></div>
             <div th:if="${!note.tags.isEmpty()}">
-                Tags: <span th:each="tag : ${note.tags}" th:text="${tag.name}" style="background-color: #e0e0e0; padding: 2px 6px; margin-right: 4px; border-radius: 3px; display: inline-block;">Tag</span>
+                Tags: <span th:each="tag : ${note.tags}" th:text="${tag.name}" class="tag-pill">Tag</span>
             </div>
         </div>
         <div class="actions">
             <a th:href="@{/notes/{id}/edit(id=${note.id})}">Edit</a>
-            <form th:action="@{/notes/{id}/delete(id=${note.id})}" method="post" th:object="${note}">
+            <form class="app-form" th:action="@{/notes/{id}/delete(id=${note.id})}" method="post" th:object="${note}">
                 <button type="submit">Delete</button>
             </form>
         </div>

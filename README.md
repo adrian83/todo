@@ -1,6 +1,6 @@
 # TODO
 
-Application for managing todo list (with authentication). Application written with: Kotlin, Spring Boot 2.1, Spring 5 (Core, MVC, Security), H2 DB, Dart 2.5, AngularDart 5.
+Application for managing notes. Application written in Java with: Spring Boot, Spring Security, Spring Reactive MVC, Thymeleaf and Postgres DB
 
 
 ## Running

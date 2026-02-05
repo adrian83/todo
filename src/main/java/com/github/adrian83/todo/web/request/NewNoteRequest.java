@@ -12,12 +12,20 @@ public class NewNoteRequest {
     @NotBlank
     private String content;
 
+    private Long[] tagIds;
+
     public NewNoteRequest() {
     }
 
     public NewNoteRequest(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public NewNoteRequest(String title, String content, Long[] tagIds) {
+        this.title = title;
+        this.content = content;
+        this.tagIds = tagIds;
     }
 
     public String getTitle() {
@@ -34,5 +42,13 @@ public class NewNoteRequest {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long[] getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(Long[] tagIds) {
+        this.tagIds = tagIds;
     }
 }

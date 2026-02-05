@@ -3,6 +3,8 @@ package com.github.adrian83.todo.service;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import com.github.adrian83.todo.service.exception.TagNotFoundException;
 
 @Service
 public class TagService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TagService.class);
 
     private final TagRepository tagRepository;
 
@@ -52,8 +56,17 @@ public class TagService {
         tagRepository.deleteById(id);
     }
 
+    // TODO implement properly
     @Transactional(readOnly = true)
-    public Set<Tag> listTagsByUserAndIds(Long userId, Set<Long> ids) {
-        return tagRepository.findByUserIdAndIdIn(userId, ids); 
+    public List<Tag> listTagsByUserAndIds(User user, List<Long> ids) {
+        logger.debug("Listing tags for user: {} and ids: {}", user.getId(), ids);
+        // return tagRepository.findByUserAndIdIn(user, ids);listTagsByUser(createNoteCommand.user().getId()); 
+        return listTagsByUser(user.getId())
+                .stream()
+                .filter(tag -> {
+                    logger.info("Checking tag: {}", tag);
+                    return ids.contains(tag.getId());
+                })
+                .collect(java.util.stream.Collectors.toCollection(java.util.ArrayList::new));
     }
 }

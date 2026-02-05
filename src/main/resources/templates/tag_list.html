@@ -9,6 +9,8 @@
 <div th:insert="~{fragments/header :: header}"></div>
 <h1>Tags</h1>
 
+<div th:insert="~{fragments/messages :: form_messages}"></div>
+
 <div class="header-links">
     <a th:href="@{/tags/new}">Create new tag</a>
 </div>
@@ -23,16 +25,13 @@
         </div>
         <div class="actions">
             <a th:href="@{/tags/{id}/edit(id=${tag.id})}">Edit</a>
-            <form th:action="@{/tags/{id}/delete(id=${tag.id})}" method="post" th:object="${tag}">
+            <form class="app-form" th:action="@{/tags/{id}/delete(id=${tag.id})}" method="post" th:object="${tag}">
                 <button type="submit">Delete</button>
             </form>
         </div>
     </div>
 </div>
 
-<div th:if="${param.message}">
-    <p th:text="${param.message}">Message</p>
-</div>
 
 </body>
 </html>

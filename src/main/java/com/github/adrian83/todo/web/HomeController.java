@@ -1,5 +1,7 @@
 package com.github.adrian83.todo.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +13,14 @@ import com.github.adrian83.todo.security.UserPrincipal;
 @Controller
 public class HomeController {
 
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
     @GetMapping("/")
-    public String home(Model model, @RequestParam(value = "message", required = false) String message,
-                       @AuthenticationPrincipal UserPrincipal principal) {
+    public String home(
+            Model model, 
+            @RequestParam(value = "message", required = false) String message,
+            @AuthenticationPrincipal UserPrincipal principal
+        ) {
         if (message != null && !message.isBlank()) {
             model.addAttribute("message", message);
         } else if (!model.containsAttribute("message")) {

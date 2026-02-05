@@ -9,14 +9,12 @@
 <div th:insert="~{fragments/header :: header}"></div>
 <h1 th:text="${tagId} != null ? 'Edit Tag' : 'Create Tag'">Create Tag</h1>
 
-<form th:action="${tagId} != null ? @{/tags/{id}(id=${tagId})} : @{/tags}" th:object="${newTagRequest}" method="post">
-    <div th:if="${#fields.hasErrors('*')}">
-        <p style="color: rgb(46, 30, 30);">Please correct the errors below.</p>
-    </div>
+<form class="app-form" th:action="${tagId} != null ? @{/tags/{id}(id=${tagId})} : @{/tags}" th:object="${newTagRequest}" method="post">
+    <div th:insert="~{fragments/messages :: form_messages}"></div>
     <div>
         <label for="name">Tag Name</label>
         <input type="text" id="name" th:field="*{name}" />
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <div class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
     </div>
     <div>
         <button type="submit">Save</button>

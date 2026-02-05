@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <header th:fragment="header" style="background-color: #f0f0f0; padding: 16px; margin-bottom: 20px; border-bottom: 1px solid #ddd;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 1.2rem; font-weight: bold;">
-                <a th:href="@{/}" style="text-decoration: none; color: #222;">Notes</a>
+    <header th:fragment="header" class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <a th:href="@{/}">Notes</a>
             </div>
-            <nav>
-                <span th:if="${userPrincipal}" style="display: flex; gap: 16px; align-items: center;">
+            <nav class="header-nav">
+                <span th:if="${userPrincipal}" class="user-info">
                     <span>Welcome, <strong th:text="${userPrincipal.username}"></strong></span>
-                    <a th:href="@{/notes}" style="color: #1a73e8; text-decoration: none;">My Notes</a>
-                    <a th:href="@{/tags}" style="color: #1a73e8; text-decoration: none;">My Tags</a>
-                    <a th:href="@{/logout}" style="color: #1a73e8; text-decoration: none;">Logout</a>
+                    <a th:href="@{/notes}">My Notes</a>
+                    <a th:href="@{/tags}">My Tags</a>
+                    <a th:href="@{/logout}">Logout</a>
                 </span>
-                <span th:unless="${userPrincipal}" style="display: flex; gap: 16px;">
-                    <a th:href="@{/login}" style="color: #1a73e8; text-decoration: none;">Login</a>
-                    <a th:href="@{/register}" style="color: #1a73e8; text-decoration: none;">Register</a>
+                <span th:unless="${userPrincipal}" class="auth-links">
+                    <a th:href="@{/login}">Login</a>
+                    <a th:href="@{/register}">Register</a>
                 </span>
             </nav>
         </div>

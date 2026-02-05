@@ -1,5 +1,7 @@
 package com.github.adrian83.todo.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ import jakarta.validation.Valid;
 
 @Controller
 public class TagController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TagController.class);
 
     private final TagService tagService;
     private final UserRepository userRepository;
@@ -56,8 +60,13 @@ public class TagController {
     @PostMapping("/tags")
     public String create(@Valid @ModelAttribute("newTagRequest") NewTagRequest form,
                          BindingResult bindingResult,
+                         Model model,
                          @AuthenticationPrincipal UserPrincipal principal) {
         if (bindingResult.hasErrors()) {
+            if (principal != null) {
+                model.addAttribute("userPrincipal", principal);
+            }
+            model.addAttribute("hasErrors", true);
             return "tag_form";
         }
 
@@ -75,6 +84,7 @@ public class TagController {
                          Model model,
                          @AuthenticationPrincipal UserPrincipal principal) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("hasErrors", true);
             model.addAttribute("tagId", id);
             if (principal != null) {
                 model.addAttribute("userPrincipal", principal);

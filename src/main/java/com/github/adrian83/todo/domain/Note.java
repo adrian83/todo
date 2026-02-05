@@ -1,9 +1,10 @@
 package com.github.adrian83.todo.domain;
 
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,7 +56,7 @@ public class Note {
         joinColumns = @JoinColumn(name = "note_id", foreignKey = @ForeignKey(name = "fk_note_tags_note")),
         inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name = "fk_note_tags_tag"))
     )
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new ArrayList<>();
 
     protected Note() {
         // JPA
@@ -115,17 +116,17 @@ public class Note {
         return updatedAt;
     }
 
-    public Set<Tag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
     public void addTag(Tag tag) {
         if (tags == null) {
-            tags = new HashSet<>();
+            tags = new ArrayList<>();
         }
         tags.add(tag);
     }
@@ -155,6 +156,7 @@ public class Note {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", tags=" + tags.stream().map(Tag::toString).collect(Collectors.joining(",")) +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

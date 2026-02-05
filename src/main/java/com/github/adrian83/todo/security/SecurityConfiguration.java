@@ -1,17 +1,21 @@
 package com.github.adrian83.todo.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
-import org.springframework.http.HttpStatus;
 
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     private final TokenAuthenticationManager tokenAuthenticationManager;
 
@@ -29,7 +33,7 @@ public class SecurityConfiguration {
             .csrf(ServerHttpSecurity.CsrfSpec::disable)
             .authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/", "/login", "/register").permitAll()
-                .pathMatchers("/h2-console/**").permitAll()
+                .pathMatchers("/style.css", "/static/**").permitAll()
                 .anyExchange().authenticated()
             )
             .addFilterAfter(authenticationWebFilter, org.springframework.security.config.web.server.SecurityWebFiltersOrder.AUTHENTICATION)

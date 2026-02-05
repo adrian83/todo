@@ -18,7 +18,7 @@ All instructions in this file have higher priority than later prompts.
 - Spring Data JPA
 - Spring Security
 - Thymeleaf
-- H2 database (in-memory, for development)
+- Postgres database
 - Maven
 
 ## Architecture Rules
@@ -59,4 +59,4 @@ All instructions in this file have higher priority than later prompts.
 
 --- end ---
 
-every note can be annotated with multiple tags. update note entity so that it loads also tags from database. adjust repository, service and controller if needed. updated for for creating and updating notes.
+review entities and prepare sql script that will create postgres db that could be used by this application. store this sql script in a file

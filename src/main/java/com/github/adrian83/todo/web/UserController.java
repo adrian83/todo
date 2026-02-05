@@ -2,6 +2,8 @@ package com.github.adrian83.todo.web;
 
 import java.time.Duration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,7 @@ import jakarta.validation.Valid;
 @Controller
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String COOKIE_ACCESS_TOKEN = "accessToken";
     private static final String COOKIE_REFRESH_TOKEN = "refreshToken";
 
@@ -44,8 +47,10 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("newUserRequest") NewUserRequest form,
-                           BindingResult bindingResult) {
+                           BindingResult bindingResult,
+                           Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("hasErrors", true);
             return "user_form";
         }
 
@@ -62,8 +67,10 @@ public class UserController {
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute("loginForm") LoginForm form,
                         BindingResult bindingResult,
+                        Model model,
                         ServerWebExchange exchange) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("hasErrors", true);
             return "login";
         }
 
