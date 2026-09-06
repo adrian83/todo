@@ -59,4 +59,4 @@ All instructions in this file have higher priority than later prompts.
 
 --- end ---
 
-review entities and prepare sql script that will create postgres db that could be used by this application. store this sql script in a file
+There is a search form on note_list.html page. tags are displayed one per row. change it so that tags will be displayed one by one. in case of many tags available it will of course by many lines and in such case the space between lines should be rather small.

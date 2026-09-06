@@ -15,7 +15,9 @@ import com.github.adrian83.todo.service.command.CreateNoteCommand;
 import com.github.adrian83.todo.service.command.DeleteNoteCommand;
 import com.github.adrian83.todo.service.command.UpdateNoteCommand;
 import com.github.adrian83.todo.service.exception.NoteNotFoundException;
+import com.github.adrian83.todo.service.query.FetchNoteQuery;
 import com.github.adrian83.todo.service.query.ListNotesQuery;
+import com.github.adrian83.todo.service.query.ListTagsByIdsQuery;
 
 @Service
 public class NoteService {
@@ -34,7 +36,7 @@ public class NoteService {
     public Note addNote(CreateNoteCommand createNoteCommand) {
         logger.debug("Creating new note with title: {}", createNoteCommand.title());
         Note note = new Note(createNoteCommand.user(), createNoteCommand.title(), createNoteCommand.content());
-        List<Tag> tags = tagService.listTagsByUserAndIds(createNoteCommand.user(), createNoteCommand.tagIds());
+        List<Tag> tags = tagService.listTagsByUserAndIds(new ListTagsByIdsQuery(createNoteCommand.user(), createNoteCommand.tagIds()));
 
         logger.info("Associating tags: {} to the new note", tags);
         
@@ -45,11 +47,9 @@ public class NoteService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Note> findById(Long id) {
-        return noteRepository.findById(id);
+    public Optional<Note> findById(FetchNoteQuery fetchNoteQuery) {
+        return noteRepository.findByIdAndUserId(fetchNoteQuery.noteId(), fetchNoteQuery.user().getId());
     }
-
-    
 
     @Transactional
     public Note updateNote(UpdateNoteCommand updateNoteCommand) {
@@ -58,7 +58,7 @@ public class NoteService {
             .orElseThrow(() -> new NoteNotFoundException(updateNoteCommand.id()));
         note.setTitle(updateNoteCommand.title());
         note.setContent(updateNoteCommand.content());
-        note.setTags(tagService.listTagsByUserAndIds(updateNoteCommand.user(), updateNoteCommand.tagIds()));
+        note.setTags(tagService.listTagsByUserAndIds(new ListTagsByIdsQuery(updateNoteCommand.user(), updateNoteCommand.tagIds())));
         Note updatedNote = noteRepository.save(note);
         logger.info("Note updated successfully with id: {}", updatedNote.getId());
         return updatedNote;
@@ -66,17 +66,38 @@ public class NoteService {
 
     @Transactional(readOnly = true)
     public List<Note> listNotesByUser(ListNotesQuery listNotesQuery) {
-        return noteRepository.findByUserId(listNotesQuery.user().getId());
+        Long userId = listNotesQuery.user().getId();
+        List<Long> tagIds = listNotesQuery.tagIds() == null ? List.of() : listNotesQuery.tagIds();
+        boolean hasTags = !tagIds.isEmpty();
+
+        return listNotesQuery.mSearchPhrase()
+            .filter(s -> !s.isBlank())
+            .map(phrase -> {
+                if (hasTags) {
+                    return noteRepository.searchByUserIdAndTextAndTags(userId, phrase, tagIds, (long) tagIds.size());
+                } else {
+                    return noteRepository.searchByUserIdAndText(userId, phrase);
+                }
+            })
+            .orElseGet(() -> {
+                if (hasTags) {
+                    return noteRepository.searchByUserIdAndTags(userId, tagIds, (long) tagIds.size());
+                } else {
+                    return noteRepository.findByUserId(userId);
+                }
+            });
     }
 
     @Transactional
     public void deleteNote(DeleteNoteCommand deleteNoteCommand) {
         Long id = deleteNoteCommand.noteId();
-        logger.debug("Deleting note with id: {}", id);
-        if (!noteRepository.existsById(id)) {
-            throw new NoteNotFoundException(id);
-        }
+        Long userId = deleteNoteCommand.user().getId();
+        logger.debug("Deleting note with id: {} for user: {}", id, userId);
+        
+        Note note = noteRepository.findByIdAndUserId(id, userId)
+            .orElseThrow(() -> new NoteNotFoundException(id));
+        
         noteRepository.deleteById(id);
-        logger.info("Note deleted successfully with id: {}", id);
+        logger.info("Note deleted successfully with id: {} for user: {}", id, userId);
     }
 }

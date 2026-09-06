@@ -15,6 +15,27 @@
     <a th:href="@{/notes/new}">Create new note</a>
 </div>
 
+<div class="search-form">
+    <form th:action="@{/notes}" method="get">
+        <input type="text" name="q" placeholder="Search title or content" th:value="${q}" />
+        <div th:if="${availableTags != null} and ${availableTags.size()} &gt; 0">
+            <label>Tags:</label>
+            <!-- use an additional class so we can present tags horizontally with tighter line spacing -->
+            <div class="checkbox-list inline">
+                <div th:each="tag : ${availableTags}">
+                    <label>
+                        <input type="checkbox" name="tagIds" th:value="${tag.id}"
+                               th:checked="${selectedTagIds != null} ? ${selectedTagIds.contains(tag.id)} : false" />
+                        <span th:text="${tag.name}">Tag</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Search</button>
+        <a th:href="@{/notes}" class="button">Clear</a>
+    </form>
+</div>
+
 <div class="container">
     <div th:each="note : ${notes}" class="card">
         <div class="title" th:text="${note.title}">Title</div>

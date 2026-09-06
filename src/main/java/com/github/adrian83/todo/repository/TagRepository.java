@@ -1,6 +1,7 @@
 package com.github.adrian83.todo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +15,8 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findByUserIdAndIdIn(Long userId, List<Long> tagIds);
 
     List<Tag> findByUserAndIdIn(User user, List<Long> tagIds);
+
+    Optional<Tag> findByIdAndUser(Long id, User user);
+
+    boolean existsByIdAndUser(Long id, User user);
 }

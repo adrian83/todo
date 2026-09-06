@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.github.adrian83.todo.domain.User;
@@ -23,6 +24,10 @@ import com.github.adrian83.todo.service.exception.UserNotFoundException;
 import com.github.adrian83.todo.service.response.TokenResponse;
 import com.github.adrian83.todo.web.request.LoginForm;
 import com.github.adrian83.todo.web.request.NewUserRequest;
+import com.github.adrian83.todo.web.util.ErrorMessage;
+import com.github.adrian83.todo.web.util.InfoMessage;
+import com.github.adrian83.todo.web.util.ModelUtil;
+import com.github.adrian83.todo.web.util.RedirectBuilder;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +35,14 @@ import jakarta.validation.Valid;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private static final String REGISTER_PATH = "/register";
+    private static final String LOGIN_PATH = "/login";
+    private static final String LOGOUT_PATH = "/logout";
+
+    private static final String REGISTER_VIEW = "user_form";
+    private static final String LOGIN_VIEW = "login";
+
     private static final String COOKIE_ACCESS_TOKEN = "accessToken";
     private static final String COOKIE_REFRESH_TOKEN = "refreshToken";
 
@@ -39,62 +52,76 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
-    public String createForm(Model model) {
+    @GetMapping(REGISTER_PATH)
+    public String createForm(
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String error,
+            Model model
+    ) {
         model.addAttribute("newUserRequest", new NewUserRequest());
-        return "user_form";
+        
+        ModelUtil.enrichWithMessageAndError(model, message, error);
+        return REGISTER_VIEW;
     }
 
-    @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("newUserRequest") NewUserRequest form,
-                           BindingResult bindingResult,
-                           Model model) {
+    @PostMapping(REGISTER_PATH)
+    public String register(
+            @Valid @ModelAttribute("newUserRequest") NewUserRequest form,
+            BindingResult bindingResult,
+            Model model
+    ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("hasErrors", true);
-            return "user_form";
+            return REGISTER_VIEW;
         }
 
         userService.register(form);
-        return "redirect:/?message=User+registered+successfully";
+        return new RedirectBuilder("/")
+                .addInfoMessage(InfoMessage.USER_REGISTERED_SUCCESSFULLY)
+                .build();
     }
 
-    @GetMapping("/login")
-    public String loginForm(Model model) {
+    @GetMapping(LOGIN_PATH)
+    public String loginForm(
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String error,
+            Model model) {
         model.addAttribute("loginForm", new LoginForm());
-        return "login";
+        
+        ModelUtil.enrichWithMessageAndError(model, message, error);
+        return LOGIN_VIEW;
     }
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN_PATH)
     public String login(@Valid @ModelAttribute("loginForm") LoginForm form,
-                        BindingResult bindingResult,
-                        Model model,
-                        ServerWebExchange exchange) {
+            BindingResult bindingResult,
+            Model model,
+            ServerWebExchange exchange) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("hasErrors", true);
-            return "login";
+            return LOGIN_VIEW;
         }
 
-        try {
-            User user = userService.login(form.getUsername(), form.getPassword());
-            TokenResponse tokens = userService.generateTokens(user);
-            
-            addTokenCookies(exchange, tokens);
-            
-            return "redirect:/";
-        } catch (UserNotFoundException | InvalidPasswordException e) {
-            return "redirect:/login?error=Invalid+username+or+password";
-        }
+        User user = userService.login(form.getUsername(), form.getPassword());
+        TokenResponse tokens = userService.generateTokens(user);
+
+        addTokenCookies(exchange, tokens);
+
+        return new RedirectBuilder("/")
+                .build();
+
     }
 
-    @GetMapping("/logout")
+    @GetMapping(LOGOUT_PATH)
     public String logout(ServerWebExchange exchange) {
         clearTokenCookies(exchange);
-        return "redirect:/";
+        return new RedirectBuilder("/")
+                .build();
     }
 
     private void addTokenCookies(ServerWebExchange exchange, TokenResponse tokens) {
         HttpHeaders headers = exchange.getResponse().getHeaders();
-        
+
         ResponseCookie accessTokenCookie = ResponseCookie.from(COOKIE_ACCESS_TOKEN, tokens.getAccessToken())
                 .httpOnly(true)
                 .secure(false) // Set to true in production with HTTPS
@@ -114,7 +141,7 @@ public class UserController {
 
     private void clearTokenCookies(ServerWebExchange exchange) {
         HttpHeaders headers = exchange.getResponse().getHeaders();
-        
+
         ResponseCookie accessTokenCookie = ResponseCookie.from(COOKIE_ACCESS_TOKEN, "")
                 .path("/")
                 .maxAge(Duration.ZERO)
@@ -130,6 +157,16 @@ public class UserController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String handleExists(UserAlreadyExistsException ex) {
-        return "redirect:/register?error=" + ex.getMessage();
+        return new RedirectBuilder(REGISTER_PATH)
+                .addErrorMessage(ErrorMessage.USER_ALREADY_EXISTS)
+                .build();
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleExists(UserNotFoundException ex) {
+        return new RedirectBuilder(LOGIN_PATH)
+                .addErrorMessage(ErrorMessage.INVALID_CREDENTIALS)
+                .build();
+    }
+
 }

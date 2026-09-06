@@ -1,7 +1,6 @@
 package com.github.adrian83.todo.service;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.adrian83.todo.domain.Tag;
-import com.github.adrian83.todo.domain.User;
 import com.github.adrian83.todo.repository.TagRepository;
+import com.github.adrian83.todo.service.command.CreateTagCommand;
+import com.github.adrian83.todo.service.command.DeleteTagCommand;
+import com.github.adrian83.todo.service.command.UpdateTagCommand;
 import com.github.adrian83.todo.service.exception.TagNotFoundException;
+import com.github.adrian83.todo.service.query.FindTagQuery;
+import com.github.adrian83.todo.service.query.ListTagsByIdsQuery;
+import com.github.adrian83.todo.service.query.ListTagsQuery;
 
 @Service
 public class TagService {
@@ -25,48 +29,40 @@ public class TagService {
     }
 
     @Transactional
-    public Tag addTag(User user, String name) {
-        Tag tag = new Tag(user, name);
+    public Tag addTag(CreateTagCommand cmd) {
+        Tag tag = new Tag(cmd.getUser(), cmd.getName());
         return tagRepository.save(tag);
     }
 
     @Transactional(readOnly = true)
-    public java.util.Optional<Tag> findById(Long id) {
-        return tagRepository.findById(id);
+    public java.util.Optional<Tag> findById(FindTagQuery query) {
+        return tagRepository.findByIdAndUser(query.getId(), query.getUser());
     }
 
     @Transactional
-    public Tag updateTag(Long id, String name) {
-        Tag tag = tagRepository.findById(id)
-            .orElseThrow(() -> new TagNotFoundException(id));
-        tag.setName(name);
+    public Tag updateTag(UpdateTagCommand cmd) {
+        Tag tag = tagRepository.findByIdAndUser(cmd.getId(), cmd.getUser())
+            .orElseThrow(() -> new TagNotFoundException(cmd.getId()));
+        tag.setName(cmd.getName());
         return tagRepository.save(tag);
     }
 
     @Transactional(readOnly = true)
-    public List<Tag> listTagsByUser(Long userId) {
-        return tagRepository.findByUserId(userId);
+    public List<Tag> listTagsByUser(ListTagsQuery query) {
+        return tagRepository.findByUserId(query.getUser().getId());
     }
 
     @Transactional
-    public void deleteTag(Long id) {
-        if (!tagRepository.existsById(id)) {
-            throw new TagNotFoundException(id);
+    public void deleteTag(DeleteTagCommand cmd) {
+        if (!tagRepository.existsByIdAndUser(cmd.getId(), cmd.getUser())) {
+            throw new TagNotFoundException(cmd.getId());
         }
-        tagRepository.deleteById(id);
+        tagRepository.deleteById(cmd.getId());
     }
 
-    // TODO implement properly
     @Transactional(readOnly = true)
-    public List<Tag> listTagsByUserAndIds(User user, List<Long> ids) {
-        logger.debug("Listing tags for user: {} and ids: {}", user.getId(), ids);
-        // return tagRepository.findByUserAndIdIn(user, ids);listTagsByUser(createNoteCommand.user().getId()); 
-        return listTagsByUser(user.getId())
-                .stream()
-                .filter(tag -> {
-                    logger.info("Checking tag: {}", tag);
-                    return ids.contains(tag.getId());
-                })
-                .collect(java.util.stream.Collectors.toCollection(java.util.ArrayList::new));
+    public List<Tag> listTagsByUserAndIds(ListTagsByIdsQuery query) {
+        logger.debug("Listing tags for user: {} and ids: {}", query.getUser().getId(), query.getIds());
+        return tagRepository.findByUserAndIdIn(query.getUser(), query.getIds());
     }
 }

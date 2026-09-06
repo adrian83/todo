@@ -38,6 +38,19 @@ form {
     align-items: center; 
     gap: 8px;
 }
+
+/* variant used when we want individual items to flow horizontally with tight line spacing */
+.checkbox-list.inline {
+    display: flex;
+    flex-direction: row; /* override form div rule which sets column */
+    flex-wrap: wrap;
+    gap: 4px; /* small gap between items/lines */
+}
+
+/* override the default bottom margin for the inline layout */
+.checkbox-list.inline div {
+    margin-bottom: 0;
+}
 form div {
     display: flex;
     flex-direction: column;

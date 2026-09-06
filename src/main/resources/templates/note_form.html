@@ -23,7 +23,7 @@
             </div>
             <div>
                 <label>Tags</label>
-                <div th:if="${availableTags}" class="checkbox-list">
+                <div th:if="${availableTags}" class="checkbox-list inline">
                     <div th:each="tag : ${availableTags}">
                         <input type="checkbox" th:id="'tag_' + ${tag.id}" th:field="*{tagIds}" th:value="${tag.id}" />
                         <label th:for="'tag_' + ${tag.id}" th:text="${tag.name}">Tag</label>

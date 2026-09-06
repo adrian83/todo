@@ -5,13 +5,9 @@
 </head>
 <body>
 <div th:fragment="form_messages">
-    <div th:if="${param.message != null}" class="success-message" th:text="${param.message}"></div>
-    <div th:if="${message != null}" class="success-message" th:text="${message}"></div>
-
-    <div th:if="${param.error != null}" class="error-message" th:text="${param.error}"></div>
-    <div th:if="${error != null}" class="error-message" th:text="${error}"></div>
-
-    <div th:if="${hasErrors}" class="error-message">Please correct the errors below.</div>
+<div th:if="${message != null}" class="success-message" th:text="${message}"></div>
+<div th:if="${error != null}" class="error-message" th:text="${error}"></div>
+<div th:if="${hasErrors}" class="error-message">Please correct the errors below.</div>
 </div>
 </body>
 </html>
